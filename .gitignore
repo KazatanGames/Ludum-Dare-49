@@ -1,0 +1,5 @@
+# This .gitignore file should be placed at the root of your Kazatan Games project directory
+
+[Vv]ideo/
+[Tt]emp/
+[Cc]oncepts/
