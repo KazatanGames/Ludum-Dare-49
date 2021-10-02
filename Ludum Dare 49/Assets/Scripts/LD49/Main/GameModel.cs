@@ -21,6 +21,11 @@ namespace KazatanGames.Game
         public List<MoleculeData> Molecules { get; protected set; }
         public List<MoleculeData> DeadMolecules { get; protected set; }
 
+        public List<Vector3> ReactionLocations { get; protected set; } = new List<Vector3>();
+
+        public List<ReactionStruct> KnownReactions { get; protected set; }
+        public bool KnownReactionsInvalidated { get; set; } = true;
+
         protected List<MoleculeData> newMolecules;
 
         public void Initialise(GameConfigSO config)
@@ -28,6 +33,7 @@ namespace KazatanGames.Game
             Config = config;
             Molecules = new List<MoleculeData>();
             DeadMolecules = new List<MoleculeData>();
+            KnownReactions = new List<ReactionStruct>();
 
             solutionEnergyTickTime = 1f / config.solutionEnergyTicksPerSecond;
 

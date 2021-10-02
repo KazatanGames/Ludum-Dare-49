@@ -15,4 +15,6 @@ MonoBehaviour:
   title: Double Yellow Circle
   moleculePrefab: {fileID: 2844902137024251639, guid: 6288e084327971442986c24281b1e058,
     type: 3}
+  sprite: {fileID: 21300000, guid: 0b29b962ea0f33e4894cd6dc2530c97d, type: 3}
   energiseMulti: 0.5
+  energeticSpeedMulti: 1

@@ -14,12 +14,24 @@ namespace KazatanGames.Game
         [SerializeField]
         protected Transform moleculeContainer;
         [SerializeField]
+        protected RectTransform reactionsUIContainer;
+        [SerializeField]
+        protected Sprite plusSprite;
+        [SerializeField]
+        protected Sprite equalsSprite;
+        [SerializeField]
+        protected KnownReactionRow knownReactionRowPrefab;
+        [SerializeField]
         protected TextMeshProUGUI heatLevelText;
         [SerializeField]
         protected ParticleSystem heatParticleSystem;
+        [SerializeField]
+        protected GameObject reactionParticlePrefab;
 
         [SerializeField]
-        protected MoleculeTypeSO moleculesToAdd;
+        protected MoleculeTypeSO moleculesToAddY;
+        [SerializeField]
+        protected MoleculeTypeSO moleculesToAddR;
 
         [SerializeField]
         protected GameConfigSO gameConfig;
@@ -57,6 +69,9 @@ namespace KazatanGames.Game
             GameModel.Current.Update(Time.deltaTime);
             DrawMolecules();
             DrawFlame();
+            DrawReactions();
+            if (GameModel.Current.KnownReactionsInvalidated) DrawKnownReactions();
+
             heatLevelText.SetText($"Heat: {GameModel.Current.CurrentHeatLevel}");
         }
 
@@ -104,14 +119,55 @@ namespace KazatanGames.Game
             }
         }
 
+        protected void DrawReactions()
+        {
+            foreach(Vector3 position in GameModel.Current.ReactionLocations)
+            {
+                Instantiate(reactionParticlePrefab, position, Quaternion.identity, moleculeContainer).transform.localPosition = position;
+            }
+            GameModel.Current.ReactionLocations.Clear();
+        }
+
+        protected void DrawKnownReactions()
+        {
+            GameModel.Current.KnownReactionsInvalidated = false;
+            foreach (RectTransform child in reactionsUIContainer)
+            {
+                Destroy(child.gameObject);
+            }
+            foreach (ReactionStruct rs in GameModel.Current.KnownReactions)
+            {
+                KnownReactionRow krr = Instantiate(knownReactionRowPrefab, reactionsUIContainer);
+                Sprite[] sprites = new Sprite[rs.results.Length + 4];
+
+                sprites[0] = rs.input1.sprite;
+                sprites[1] = plusSprite;
+                sprites[2] = rs.input2.sprite;
+                sprites[3] = equalsSprite;
+                int i = 0;
+                foreach(MoleculeTypeSO mt in rs.results)
+                {
+                    sprites[4 + i] = mt.sprite;
+                    i++;
+                }
+
+                krr.CreateImages(sprites);
+            }
+        }
+
         public void ChangeHeat(float value)
         {
             GameModel.Current.SetHeatLevel(value);
         }
 
-        public void AddMolecules()
+        public void AddMoleculesY()
         {
-            GameModel.Current.AddMolecules(moleculesToAdd, Random.Range(4, 8));
+            GameModel.Current.AddMolecules(moleculesToAddY, Random.Range(4, 8));
+            GameModel.Current.KnownReactionsInvalidated = true;
+        }
+        public void AddMoleculesR()
+        {
+            GameModel.Current.AddMolecules(moleculesToAddR, Random.Range(4, 8));
         }
 
 #if UNITY_EDITOR

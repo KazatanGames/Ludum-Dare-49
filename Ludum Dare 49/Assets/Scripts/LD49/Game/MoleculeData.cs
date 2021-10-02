@@ -61,8 +61,31 @@ namespace KazatanGames.Game
                 // React!
                 GameModel.Current.DeadMolecules.Add(this);
                 GameModel.Current.DeadMolecules.Add(reactee);
-                // TODO: energy change
-                GameModel.Current.CreateMolecule(reactedReaction.result, (position + reactee.position) / 2f, (turnSpeed + reactee.turnSpeed) / 2f, (speed + reactee.speed) / 2f, (energy + reactee.energy) / 2f);
+                NearestSolutionPoint.ReceiveEnergy(reactedReaction.energyCreated);
+                foreach(MoleculeTypeSO mType in reactedReaction.results)
+                {
+                    GameModel.Current.CreateMolecule(mType, (position + reactee.position) / 2f, Random.Range(0f, 360f), (speed + reactee.speed) / 2f, (energy + reactee.energy) / 2f);
+                }
+                GameModel.Current.ReactionLocations.Add((position + reactee.position) / 2f);
+                if (!GameModel.Current.KnownReactions.Contains(reactedReaction))
+                {
+                    GameModel.Current.KnownReactions.Add(reactedReaction);
+                    GameModel.Current.KnownReactionsInvalidated = true;
+                }
+            }
+        }
+
+        public SolutionDataPoint NearestSolutionPoint
+        {
+            get
+            {
+                float xRatio = Mathf.InverseLerp(0f, GameModel.Current.Config.visWidth, position.x);
+                float yRatio = Mathf.InverseLerp(0f, GameModel.Current.Config.visHeight, position.y);
+
+                int xEPoint = Mathf.FloorToInt(Mathf.Lerp(0, GameModel.Current.Config.dataWidth, xRatio));
+                int yEPoint = Mathf.FloorToInt(Mathf.Lerp(0, GameModel.Current.Config.dataHeight, yRatio));
+
+                return GameModel.Current.GetSolutionDataPoint(xEPoint, yEPoint);
             }
         }
 
@@ -144,19 +167,14 @@ namespace KazatanGames.Game
         protected void Energise(float time)
         {
             // find the closest heat point and energise towards that energy level
-            float xRatio = Mathf.InverseLerp(0f, GameModel.Current.Config.visWidth, position.x);
-            float yRatio = Mathf.InverseLerp(0f, GameModel.Current.Config.visHeight, position.y);
 
-            int xEPoint = Mathf.FloorToInt(Mathf.Lerp(0, GameModel.Current.Config.dataWidth, xRatio));
-            int yEPoint = Mathf.FloorToInt(Mathf.Lerp(0, GameModel.Current.Config.dataHeight, yRatio));
-
-            energy += (GameModel.Current.GetSolutionDataPoint(xEPoint, yEPoint).Energy - energy) * type.energiseMulti * time;
+            energy += (NearestSolutionPoint.Energy - energy) * type.energiseMulti * time;
 
             // add speed based on energy level
-            speed += GameModel.Current.Config.speedChangePerEnergy * (energy - GameModel.Current.Config.outsideEnergy) * time;
+            speed += GameModel.Current.Config.speedChangePerEnergy * (energy - GameModel.Current.Config.outsideEnergy) * type.energeticSpeedMulti * time;
             speed = Mathf.Max(speed, 0f);
 
-            // also find a direction travel should be encouraged in
+            // TODO: also find a direction travel should be encouraged in
         }
     }
 }

@@ -50,7 +50,7 @@ namespace KazatanGames.Game
             float totalTemp = Energy * GameModel.Current.Config.heatPreservation;
             float totalDivisor = GameModel.Current.Config.heatPreservation;
 
-            totalTemp = globalAverage * GameModel.Current.Config.globalEffect;
+            totalTemp += globalAverage * GameModel.Current.Config.globalEffect;
             totalDivisor += GameModel.Current.Config.globalEffect;
 
             if (side)
@@ -89,10 +89,7 @@ namespace KazatanGames.Game
 
             float dE = difference * GameModel.Current.Config.heatTransfer;
 
-            energyChange = dE;
-
-            //if (side) CalcLoseToSide();
-            //if (top) CalcLoseToTop();
+            ReceiveEnergy(dE);
         }
 
         public bool ShouldBeHeated(int minX, int maxX)

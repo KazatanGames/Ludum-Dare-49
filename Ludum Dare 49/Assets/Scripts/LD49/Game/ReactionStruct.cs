@@ -15,7 +15,7 @@ namespace KazatanGames.Game
         public MoleculeTypeSO input2;
         public float minEnergy;
         public float maxEnergy;
-        public MoleculeTypeSO result;
+        public MoleculeTypeSO[] results;
         public float energyCreated;
     }
 }
