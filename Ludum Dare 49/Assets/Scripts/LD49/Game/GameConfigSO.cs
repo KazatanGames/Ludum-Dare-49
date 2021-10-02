@@ -36,13 +36,13 @@ namespace KazatanGames.Game
             {
                 addEnergy = 0f,
                 name = "Off",
-                rows = 1
+                width = 0
             },
             new HeatLevelStruct()
             {
                 addEnergy = 1f,
                 name = "On",
-                rows = 2
+                width = 0.33f
             }
         };
     }

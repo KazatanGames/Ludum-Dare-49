@@ -41,7 +41,7 @@ namespace KazatanGames.Game
 
         public void ApplyEnergyTransfer()
         {
-            Energy = Mathf.Clamp(Energy + energyChange, GameModel.Current.Config.minEnergy, GameModel.Current.Config.maxEnergy);
+            Energy += energyChange;
             energyChange = 0f;
         }
 
@@ -51,9 +51,9 @@ namespace KazatanGames.Game
             if (top) CalcLoseToTop();
         }
 
-        public bool ShouldBeHeated()
+        public bool ShouldBeHeated(int minX, int maxX)
         {
-            return Y <= GameModel.Current.Config.heatLevels[GameModel.Current.CurrentHeatLevel].rows;
+            return Y == 0 && X >= minX && X <= maxX;
         }
 
         public void FindNeighbours(SolutionDataPoint[] neighbours)

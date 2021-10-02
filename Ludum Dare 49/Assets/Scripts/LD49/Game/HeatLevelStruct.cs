@@ -13,7 +13,7 @@ namespace KazatanGames.Game
     {
         public string name;
         public float addEnergy;
-        [Min(1)]
-        public int rows;
+        [Range(0f, 1f)]
+        public float width;
     }
 }

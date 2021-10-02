@@ -65,10 +65,14 @@ namespace KazatanGames.Game
         protected void SolutionEnergyTick()
         {
             HeatLevelStruct heatLevel = Config.heatLevels[CurrentHeatLevel];
+            int heatedPoints = Mathf.CeilToInt(heatLevel.width * Config.dataWidth);
+            int heatXMin = (Config.dataWidth - heatedPoints) / 2;
+            int heatXMax = heatXMin + heatedPoints - 1;
+
             foreach (SolutionDataPoint sdp in SolutionDataPoints)
             {
                 sdp.CalculateEnergyTransfer();
-                if (sdp.ShouldBeHeated())
+                if (sdp.ShouldBeHeated(heatXMin, heatXMax))
                 {
                     sdp.ReceiveEnergy(heatLevel.addEnergy);
                 }
