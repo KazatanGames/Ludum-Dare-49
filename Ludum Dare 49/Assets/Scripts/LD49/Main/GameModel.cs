@@ -95,7 +95,7 @@ namespace KazatanGames.Game
                 {
                     type = type,
                     position = new Vector2(Random.Range(0f, Config.visWidth), Config.visHeight - 0.01f),
-                    angle = 270f,
+                    direction = 270f,
                     speed = Random.Range(Config.minEntrySpeed, Config.maxEntrySpeed),
                     energy = Config.outsideEnergy
                 });
@@ -114,13 +114,13 @@ namespace KazatanGames.Game
             return SolutionDataPoints[(x * Config.dataHeight) + y];
         }
 
-        public void CreateMolecule(MoleculeTypeSO type, Vector2 position, float angle, float speed, float energy)
+        public void CreateMolecule(MoleculeTypeSO type, Vector2 position, float angularSpeed, float speed, float energy)
         {
             newMolecules.Add(new MoleculeData()
             {
                 type = type,
                 position = position,
-                angle = angle,
+                turnSpeed = angularSpeed,
                 speed = speed,
                 energy = energy
             });

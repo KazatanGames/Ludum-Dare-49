@@ -138,7 +138,7 @@ namespace KazatanGames.Game
 
             foreach(MoleculeData md in GameModel.Current.Molecules)
             {
-                Handles.Label(new Vector3(md.position.x, md.position.y, 0f), Mathf.Round(md.energy) + "°");
+                Handles.Label(new Vector3(md.position.x, md.position.y, 0f) - new Vector3(45f, 0f, 0f), Mathf.Round(md.energy) + "°");
             }
         }
 #endif

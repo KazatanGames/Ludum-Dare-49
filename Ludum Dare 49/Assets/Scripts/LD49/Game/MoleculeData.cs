@@ -12,11 +12,14 @@ namespace KazatanGames.Game
         public MoleculeTypeSO type;
 
         public Vector2 position = Vector2.zero;
-        public float angle = -90f;
+        public float direction = -90f;
+        public float angle = Random.Range(0f, 360f);
         public float speed = 0f;
-        public float angularSpeed = 0f;
+        public float turnSpeed = 0f;
 
         public float energy = 0f;
+
+        protected bool rotationDirectionCCW = false;
 
         public void Update(float time)
         {
@@ -59,7 +62,7 @@ namespace KazatanGames.Game
                 GameModel.Current.DeadMolecules.Add(this);
                 GameModel.Current.DeadMolecules.Add(reactee);
                 // TODO: energy change
-                GameModel.Current.CreateMolecule(reactedReaction.result, (position + reactee.position) / 2f, (angle + reactee.angle) / 2f, (speed + reactee.speed) / 2f, (energy + reactee.energy) / 2f);
+                GameModel.Current.CreateMolecule(reactedReaction.result, (position + reactee.position) / 2f, (turnSpeed + reactee.turnSpeed) / 2f, (speed + reactee.speed) / 2f, (energy + reactee.energy) / 2f);
             }
         }
 
@@ -67,19 +70,19 @@ namespace KazatanGames.Game
         {
             float slowDown = speed * 0.9f * time;
 
-            angularSpeed -= angularSpeed * 0.8f * time;
+            turnSpeed -= turnSpeed * 0.8f * time;
 
             float turnDir = 1f;
-            if (angularSpeed < 0f)
+            if (turnSpeed < 0f)
             {
                 turnDir = -1f;
-            } else if (angularSpeed == 0f)
+            } else if (turnSpeed == 0f)
             {
                 turnDir = Random.value < 0.5 ? -1f : 1f;
             }
 
             // maybe use some of slowDown as change in direction towards 0, or -180?
-            angularSpeed += slowDown * turnDir;
+            turnSpeed += slowDown * turnDir;
 
             speed -= slowDown;
         }
@@ -90,47 +93,50 @@ namespace KazatanGames.Game
             {
                 position.x = 0.01f;
                 speed *= 0.75f;
-                angularSpeed *= 0.5f;
-                angle = 180f - angle;
+                turnSpeed *= 0.5f;
+                direction = 180f - direction;
             } else if (position.x >= GameModel.Current.Config.visWidth)
             {
                 position.x = GameModel.Current.Config.visWidth - 0.01f;
                 speed *= 0.75f;
-                angularSpeed *= 0.5f;
-                angle = 180f - angle;
+                turnSpeed *= 0.5f;
+                direction = 180f - direction;
             }
 
             if (position.y <= 0f)
             {
                 position.y = 0.01f;
                 speed *= 0.75f;
-                angularSpeed *= 0.5f;
-                angle = 90f - (angle - 270f);
+                turnSpeed *= 0.5f;
+                direction = 90f - (direction - 270f);
             }
             else if (position.y >= GameModel.Current.Config.visHeight)
             {
                 position.y = GameModel.Current.Config.visHeight - 0.01f;
                 speed *= 0.25f;
-                angularSpeed *= 0.75f;
-                angle = 90f - (angle - 270f);
+                turnSpeed *= 0.75f;
+                direction = 90f - (direction - 270f);
             }
         }
 
         protected void Move(float time)
         {
-            Quaternion q = Quaternion.AngleAxis(angle, Vector3.forward);
+            Quaternion q = Quaternion.AngleAxis(direction, Vector3.forward);
             Vector3 dPos = q * Vector3.right * speed * time;
             position = new Vector2(position.x + dPos.x, position.y + dPos.y);
         }
 
         protected void Turn(float time)
         {
-            angle += angularSpeed * time;
+            direction += turnSpeed * time;
+            angle += (rotationDirectionCCW ? -energy : energy) * time * 3f;
             ClampAngle();
         }
 
         protected void ClampAngle()
         {
+            direction %= 360f;
+            if (direction < 0f) direction += 360f;
             angle %= 360f;
             if (angle < 0f) angle += 360f;
         }
