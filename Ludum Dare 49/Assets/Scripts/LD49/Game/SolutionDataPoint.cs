@@ -45,10 +45,54 @@ namespace KazatanGames.Game
             energyChange = 0f;
         }
 
-        public void CalculateEnergyTransfer()
+        public void CalculateEnergyTransfer(float globalAverage)
         {
-            if (side) CalcLoseToSide();
-            if (top) CalcLoseToTop();
+            float totalTemp = Energy * GameModel.Current.Config.heatPreservation;
+            float totalDivisor = GameModel.Current.Config.heatPreservation;
+
+            totalTemp = globalAverage * GameModel.Current.Config.globalEffect;
+            totalDivisor += GameModel.Current.Config.globalEffect;
+
+            if (side)
+            {
+                totalTemp += GameModel.Current.Config.outsideEnergy * GameModel.Current.Config.heatTransferSide;
+                totalDivisor += GameModel.Current.Config.heatTransferSide;
+            }
+            if (top)
+            {
+                totalTemp += GameModel.Current.Config.outsideEnergy * GameModel.Current.Config.heatTransferTop;
+                totalDivisor += GameModel.Current.Config.heatTransferTop;
+            }
+            if (nU != null) {
+                totalTemp += nU.Energy * GameModel.Current.Config.heatVerticalBias;
+                totalDivisor += GameModel.Current.Config.heatVerticalBias;
+            }
+            if (nD != null)
+            {
+                totalTemp += nD.Energy * GameModel.Current.Config.heatVerticalBias;
+                totalDivisor += GameModel.Current.Config.heatVerticalBias;
+            }
+            if (nL != null)
+            {
+                totalTemp += nL.Energy;
+                totalDivisor += 1f;
+            }
+            if (nR != null)
+            {
+                totalTemp += nR.Energy;
+                totalDivisor += 1f;
+            }
+
+            float avg = totalTemp / totalDivisor;
+
+            float difference = avg - Energy;
+
+            float dE = difference * GameModel.Current.Config.heatTransfer;
+
+            energyChange = dE;
+
+            //if (side) CalcLoseToSide();
+            //if (top) CalcLoseToTop();
         }
 
         public bool ShouldBeHeated(int minX, int maxX)

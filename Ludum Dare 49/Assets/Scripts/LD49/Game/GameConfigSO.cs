@@ -21,29 +21,26 @@ namespace KazatanGames.Game
         public float minEnergy = -20f;
         public float maxEnergy = 105f;
 
-        [Range(0f, 1f)]
-        public float heatTransfer = 0.25f;
-        [Range(0f, 1f)]
+        public float heatTransfer = 0.75f;
+        public float heatPreservation = 1f;
         public float heatTransferSide = 0.33f;
-        [Range(0f, 1f)]
         public float heatTransferTop = 0.5f;
+        public float heatVerticalBias = 1f;
+        public float globalEffect = 0f;
 
         [Range(1, 240)]
         public int solutionEnergyTicksPerSecond = 1;
 
-        public HeatLevelStruct[] heatLevels = new HeatLevelStruct[] {
-            new HeatLevelStruct()
-            {
-                addEnergy = 0f,
-                name = "Off",
-                width = 0
-            },
-            new HeatLevelStruct()
-            {
-                addEnergy = 1f,
-                name = "On",
-                width = 0.33f
-            }
+        public HeatLevelStruct minHeat = new HeatLevelStruct()
+        {
+            addEnergy = 0f,
+            width = 0
+        };
+
+        public HeatLevelStruct maxHeat = new HeatLevelStruct()
+        {
+            addEnergy = 10f,
+            width = 7
         };
     }
 }

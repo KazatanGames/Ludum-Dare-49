@@ -12,20 +12,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d652dd5e87af87145a8e1c5c3d9f3597, type: 3}
   m_Name: GameConfig
   m_EditorClassIdentifier: 
-  dataWidth: 10
-  dataHeight: 14
-  visWidth: 100
-  visHeight: 140
+  dataWidth: 15
+  dataHeight: 20
+  visWidth: 90
+  visHeight: 120
   outsideEnergy: 17
-  heatUpBias: 1.5
-  heatTransfer: 0.33
-  heatTransferSide: 0.25
+  minEnergy: -20
+  maxEnergy: 105
+  heatTransfer: 1
+  heatPreservation: 0
+  heatTransferSide: 0.2
   heatTransferTop: 0.33
-  solutionEnergyTicksPerSecond: 15
-  heatLevels:
-  - name: Off
-    addEnergy: 0
-    width: 0
-  - name: On
-    addEnergy: 5
-    width: 0.5
+  heatVerticalBias: 5
+  globalEffect: 0.25
+  solutionEnergyTicksPerSecond: 30
+  minHeat:
+    addEnergy: 2
+    width: 1
+  maxHeat:
+    addEnergy: 15
+    width: 7

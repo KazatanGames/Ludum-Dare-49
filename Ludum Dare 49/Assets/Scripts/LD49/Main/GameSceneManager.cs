@@ -15,6 +15,8 @@ namespace KazatanGames.Game
         protected GameObject flaskContainer;
         [SerializeField]
         protected TextMeshProUGUI heatLevelText;
+        [SerializeField]
+        protected ParticleSystem heatParticleSystem;
 
         [SerializeField]
         protected GameConfigSO gameConfig;
@@ -22,13 +24,15 @@ namespace KazatanGames.Game
         [SerializeField]
         protected Gradient debugSolutionGradient;
         [SerializeField]
-        protected float minTemp = -100f;
+        protected int minParticlesPerSecond = 20;
         [SerializeField]
-        protected float maxTemp = 100f;
+        protected int maxParticlesPerSecond = 40;
 
         protected Color[] gradientLUT;
+        protected float particleTimeRem = 0f;
+        protected ParticleSystem.MainModule psMain;
 
-    protected override void Initialise()
+        protected override void Initialise()
         {
             gradientLUT = new Color[256];
             for (int i = 0; i < 256; i++)
@@ -37,13 +41,16 @@ namespace KazatanGames.Game
             }
 
             GameModel.Current.Initialise(gameConfig);
+
+            psMain = heatParticleSystem.main;
         }
 
         protected void Update()
         {
             GameModel.Current.Update(Time.deltaTime);
             DrawFlask();
-            heatLevelText.SetText($"Heat Level: {GameModel.Current.CurrentHeatLevel}");
+            DrawFlame();
+            heatLevelText.SetText($"Heat: {GameModel.Current.CurrentHeatLevel}");
         }
 
         protected void DrawFlask()
@@ -51,14 +58,24 @@ namespace KazatanGames.Game
 
         }
 
-        public void IncreaseHeat()
+        protected void DrawFlame()
         {
-            GameModel.Current.SetHeatLevel(GameModel.Current.CurrentHeatLevel + 1);
+            if (GameModel.Current.CurrentHeatLevel > 0) {
+                psMain.startColor = Color.Lerp(Color.yellow, Color.white, GameModel.Current.CurrentHeatLevel);
+
+                float timePerEmit = 1f / Mathf.Lerp(minParticlesPerSecond, maxParticlesPerSecond, GameModel.Current.CurrentHeatLevel);
+                particleTimeRem += Time.deltaTime;
+
+                int particlesToEmit = Mathf.FloorToInt(particleTimeRem / timePerEmit);
+
+                heatParticleSystem.Emit(particlesToEmit);
+                particleTimeRem -= timePerEmit * particlesToEmit;
+            }
         }
 
-        public void DecreaseHeat()
+        public void ChangeHeat(float value)
         {
-            GameModel.Current.SetHeatLevel(GameModel.Current.CurrentHeatLevel - 1);
+            GameModel.Current.SetHeatLevel(value);
         }
 
 #if UNITY_EDITOR

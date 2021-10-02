@@ -17,7 +17,7 @@ namespace KazatanGames.Game
         protected float solutionEnergyTickTime;
         protected float solutionEnergyTickTimeRem = 0f;
 
-        public int CurrentHeatLevel { get; protected set; } = 0;
+        public float CurrentHeatLevel { get; protected set; } = 0f;
 
         public void Initialise(GameConfigSO config)
         {
@@ -48,6 +48,7 @@ namespace KazatanGames.Game
 
         public void Update(float time)
         {
+            solutionEnergyTickTime = 1f / Config.solutionEnergyTicksPerSecond;
             solutionEnergyTickTimeRem += time;
 
             while (solutionEnergyTickTimeRem >= solutionEnergyTickTime)
@@ -57,24 +58,34 @@ namespace KazatanGames.Game
             }
         }
 
-        public void SetHeatLevel(int heatLevel)
+        public void SetHeatLevel(float heatLevel)
         {
-            CurrentHeatLevel = Mathf.Clamp(heatLevel, 0, Config.heatLevels.Length - 1);
+            CurrentHeatLevel = Mathf.Clamp(heatLevel, 0f, 1f);
         }
 
         protected void SolutionEnergyTick()
         {
-            HeatLevelStruct heatLevel = Config.heatLevels[CurrentHeatLevel];
-            int heatedPoints = Mathf.CeilToInt(heatLevel.width * Config.dataWidth);
-            int heatXMin = (Config.dataWidth - heatedPoints) / 2;
-            int heatXMax = heatXMin + heatedPoints - 1;
+            int heatWidth = Mathf.RoundToInt(Mathf.Lerp(Config.minHeat.width, Config.maxHeat.width, CurrentHeatLevel));
+            float heatEnergy = Mathf.Lerp(Config.minHeat.addEnergy, Config.maxHeat.addEnergy, CurrentHeatLevel);
+
+            Debug.Log("hw = " + heatWidth + "he = " + heatEnergy);
+
+            int heatXMin = (Config.dataWidth - heatWidth) / 2;
+            int heatXMax = heatXMin + heatWidth - 1;
+
+            float globalEffect = 0f;
 
             foreach (SolutionDataPoint sdp in SolutionDataPoints)
             {
-                sdp.CalculateEnergyTransfer();
-                if (sdp.ShouldBeHeated(heatXMin, heatXMax))
+                globalEffect += sdp.Energy;
+            }
+            float globalAverage = globalEffect / SolutionDataPoints.Length;
+            foreach (SolutionDataPoint sdp in SolutionDataPoints)
+            { 
+                sdp.CalculateEnergyTransfer(globalAverage);
+                if (CurrentHeatLevel > 0 && sdp.ShouldBeHeated(heatXMin, heatXMax))
                 {
-                    sdp.ReceiveEnergy(heatLevel.addEnergy);
+                    sdp.ReceiveEnergy(heatEnergy);
                 }
             }
             foreach (SolutionDataPoint sdp in SolutionDataPoints)
