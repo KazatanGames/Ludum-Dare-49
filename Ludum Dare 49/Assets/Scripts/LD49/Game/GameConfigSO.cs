@@ -18,8 +18,9 @@ namespace KazatanGames.Game
         public float visHeight = 140f;
 
         public float outsideEnergy = 17f;
+        public float minEnergy = -20f;
+        public float maxEnergy = 105f;
 
-        public float heatUpBias = 1.5f;
         [Range(0f, 1f)]
         public float heatTransfer = 0.25f;
         [Range(0f, 1f)]
@@ -35,13 +36,13 @@ namespace KazatanGames.Game
             {
                 addEnergy = 0f,
                 name = "Off",
-                width = 0f
+                rows = 1
             },
             new HeatLevelStruct()
             {
                 addEnergy = 1f,
                 name = "On",
-                width = 0.25f
+                rows = 2
             }
         };
     }

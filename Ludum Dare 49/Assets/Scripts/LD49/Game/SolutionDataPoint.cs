@@ -21,8 +21,7 @@ namespace KazatanGames.Game
         protected SolutionDataPoint nD;
         protected SolutionDataPoint nL;
         protected SolutionDataPoint nR;
-        protected float energyToLose = 0f;
-        protected float energyToGain = 0f;
+        protected float energyChange = 0f;
 
         public SolutionDataPoint(int x, int y, bool side, bool top)
         {
@@ -37,14 +36,13 @@ namespace KazatanGames.Game
 
         public void ReceiveEnergy(float dE)
         {
-            energyToGain += dE;
+            energyChange += dE;
         }
 
         public void ApplyEnergyTransfer()
         {
-            Energy += energyToGain - energyToLose;
-            energyToGain = 0f;
-            energyToLose = 0f;
+            Energy = Mathf.Clamp(Energy + energyChange, GameModel.Current.Config.minEnergy, GameModel.Current.Config.maxEnergy);
+            energyChange = 0f;
         }
 
         public void CalculateEnergyTransfer()
@@ -55,11 +53,16 @@ namespace KazatanGames.Game
             CalcTransferToNeighbour(nR, GameDirection2D.Right);
             if (side) CalcLoseToSide();
             if (top) CalcLoseToTop();
+
+            if (X == 5 && Y == 5)
+            {
+                Debug.Log($"{energyChange}");
+            }
         }
 
-        public bool ShouldBeHeated(int minX, int maxX)
+        public bool ShouldBeHeated()
         {
-            return Y == 0 && X >= minX && X <= maxX;
+            return Y <= GameModel.Current.Config.heatLevels[GameModel.Current.CurrentHeatLevel].rows;
         }
 
         public void FindNeighbours(SolutionDataPoint[] neighbours)
@@ -80,35 +83,26 @@ namespace KazatanGames.Game
         {
             if (n == null) return;
 
-            float dE = (Energy - n.Energy) * GameModel.Current.Config.heatTransfer;
-            switch(d)
-            {
-                case GameDirection2D.Up:
-                    dE *= GameModel.Current.Config.heatUpBias;
-                    break;
-                case GameDirection2D.Down:
-                    dE *= (1f - GameModel.Current.Config.heatUpBias);
-                    break;
-            }
+            float dE = (Energy - n.Energy) * 0.25f;
 
-            dE = Mathf.Max(dE, 0f);
+            //dE = Mathf.Max(dE, 0f);
 
-            energyToLose += dE;
-            n.ReceiveEnergy(dE);
+            energyChange += dE;
+            //n.ReceiveEnergy(dE);
         }
 
         protected void CalcLoseToSide()
         {
-            float dE = (Energy - GameModel.Current.Config.outsideEnergy) * GameModel.Current.Config.heatTransferSide;
+            float dE = (Energy - GameModel.Current.Config.outsideEnergy) * 0.25f;
             // dE = Mathf.Max(dE, 0f);
-            energyToLose += dE;
+            energyChange += dE;
         }
 
         protected void CalcLoseToTop()
         {
-            float dE = (Energy - GameModel.Current.Config.outsideEnergy) * GameModel.Current.Config.heatTransferTop;
+            float dE = (Energy - GameModel.Current.Config.outsideEnergy) * 0.25f;
             // dE = Mathf.Max(dE, 0f);
-            energyToLose += dE;
+            energyChange += dE;
         }
 
     }

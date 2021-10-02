@@ -18,14 +18,14 @@ MonoBehaviour:
   visHeight: 140
   outsideEnergy: 17
   heatUpBias: 1.5
-  heatTransfer: 0.25
-  heatTransferSide: 0.03
-  heatTransferTop: 0.1
-  solutionEnergyTicksPerSecond: 30
+  heatTransfer: 0.33
+  heatTransferSide: 0.25
+  heatTransferTop: 0.33
+  solutionEnergyTicksPerSecond: 15
   heatLevels:
   - name: Off
     addEnergy: 0
     width: 0
   - name: On
-    addEnergy: 10
+    addEnergy: 5
     width: 0.5

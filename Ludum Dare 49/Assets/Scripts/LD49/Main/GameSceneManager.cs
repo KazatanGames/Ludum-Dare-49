@@ -70,9 +70,17 @@ namespace KazatanGames.Game
 
             foreach (SolutionDataPoint sdp in GameModel.Current.SolutionDataPoints)
             {
-                int gradTime = Mathf.RoundToInt(Mathf.Clamp(Mathf.InverseLerp(minTemp, maxTemp, sdp.Energy), 0f, 1f) * 255f);
+                int gradTime = 127;
+                if (sdp.Energy < GameModel.Current.Config.outsideEnergy)
+                {
+                    gradTime = Mathf.RoundToInt(Mathf.Clamp(Mathf.InverseLerp(GameModel.Current.Config.minEnergy, GameModel.Current.Config.outsideEnergy, sdp.Energy), 0f, 1f) * 127f);
+                } else if (sdp.Energy > GameModel.Current.Config.outsideEnergy)
+                {
+                    gradTime = 127 + Mathf.RoundToInt(Mathf.Clamp(Mathf.InverseLerp(GameModel.Current.Config.outsideEnergy, GameModel.Current.Config.maxEnergy, sdp.Energy), 0f, 1f) * 128f);
+                }
                 Handles.color = gradientLUT[gradTime];
-                Handles.DrawWireDisc(sdp.Position, Vector3.forward, 1f);
+                Handles.DrawSolidDisc(sdp.Position + new Vector3(1f, -1f, 0f), Vector3.forward, 2f);
+                Handles.Label(sdp.Position, Mathf.Round(sdp.Energy) + "°");
             }
         }
 #endif
