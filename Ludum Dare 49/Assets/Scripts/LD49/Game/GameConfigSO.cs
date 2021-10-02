@@ -28,6 +28,9 @@ namespace KazatanGames.Game
         public float heatVerticalBias = 1f;
         public float globalEffect = 0f;
 
+        public float minEntrySpeed = 5f;
+        public float maxEntrySpeed = 15f;
+
         [Range(1, 240)]
         public int solutionEnergyTicksPerSecond = 1;
 
@@ -42,5 +45,7 @@ namespace KazatanGames.Game
             addEnergy = 10f,
             width = 7
         };
+
+        public List<ReactionStruct> reactions;
     }
 }

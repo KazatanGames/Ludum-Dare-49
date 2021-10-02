@@ -31,7 +31,7 @@ namespace KazatanGames.Game
             this.top = top;
 
             Energy = GameModel.Current.Config.outsideEnergy;
-            Position = new Vector3(GameModel.Current.Config.visWidth * ((float)x / GameModel.Current.Config.dataWidth), GameModel.Current.Config.visHeight * ((float)y / GameModel.Current.Config.dataHeight), 0f);
+            Position = new Vector3((-GameModel.Current.Config.visWidth / 2f) + GameModel.Current.Config.visWidth * ((float)x / GameModel.Current.Config.dataWidth), GameModel.Current.Config.visHeight * ((float)y / GameModel.Current.Config.dataHeight), 0f);
         }
 
         public void ReceiveEnergy(float dE)

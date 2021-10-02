@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: GameConfig
   m_EditorClassIdentifier: 
   dataWidth: 15
-  dataHeight: 20
-  visWidth: 90
-  visHeight: 120
+  dataHeight: 19
+  visWidth: 86
+  visHeight: 102
   outsideEnergy: 17
   minEnergy: -20
   maxEnergy: 105
@@ -32,3 +32,10 @@ MonoBehaviour:
   maxHeat:
     addEnergy: 15
     width: 7
+  reactions:
+  - input1: {fileID: 11400000, guid: c5b415c2e5c75f94cb1137ea88134c10, type: 2}
+    input2: {fileID: 11400000, guid: c5b415c2e5c75f94cb1137ea88134c10, type: 2}
+    minEnergy: 0
+    maxEnergy: 100
+    result: {fileID: 11400000, guid: c5b415c2e5c75f94cb1137ea88134c10, type: 2}
+    energyCreated: 0

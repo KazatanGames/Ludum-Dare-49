@@ -12,11 +12,14 @@ namespace KazatanGames.Game
     public class GameSceneManager : BaseSceneManager
     {
         [SerializeField]
-        protected GameObject flaskContainer;
+        protected Transform moleculeContainer;
         [SerializeField]
         protected TextMeshProUGUI heatLevelText;
         [SerializeField]
         protected ParticleSystem heatParticleSystem;
+
+        [SerializeField]
+        protected MoleculeTypeSO moleculesToAdd;
 
         [SerializeField]
         protected GameConfigSO gameConfig;
@@ -32,8 +35,12 @@ namespace KazatanGames.Game
         protected float particleTimeRem = 0f;
         protected ParticleSystem.MainModule psMain;
 
+        protected Dictionary<MoleculeData, GameObject> moleculeGameObjects;
+
         protected override void Initialise()
         {
+            moleculeGameObjects = new Dictionary<MoleculeData, GameObject>();
+
             gradientLUT = new Color[256];
             for (int i = 0; i < 256; i++)
             {
@@ -48,14 +55,34 @@ namespace KazatanGames.Game
         protected void Update()
         {
             GameModel.Current.Update(Time.deltaTime);
-            DrawFlask();
+            DrawMolecules();
             DrawFlame();
             heatLevelText.SetText($"Heat: {GameModel.Current.CurrentHeatLevel}");
         }
 
-        protected void DrawFlask()
+        protected void DrawMolecules()
         {
+            foreach (MoleculeData md in GameModel.Current.DeadMolecules)
+            {
+                moleculeGameObjects.Remove(md);
+            }
+            GameModel.Current.PurgeTheDead();
 
+            foreach (MoleculeData md in GameModel.Current.Molecules)
+            {
+                GameObject mGO;
+                if (!moleculeGameObjects.ContainsKey(md))
+                {
+                    mGO = Instantiate(md.type.moleculePrefab, md.position, Quaternion.AngleAxis(md.direction, Vector3.forward), moleculeContainer);
+                    moleculeGameObjects.Add(md, mGO);
+                }
+                else
+                {
+                    mGO = moleculeGameObjects[md];
+                }
+                mGO.transform.localPosition = md.position;
+                mGO.transform.localRotation = Quaternion.AngleAxis(md.direction, Vector3.forward);
+            }
         }
 
         protected void DrawFlame()
@@ -78,6 +105,11 @@ namespace KazatanGames.Game
             GameModel.Current.SetHeatLevel(value);
         }
 
+        public void AddMolecules()
+        {
+            GameModel.Current.AddMolecules(moleculesToAdd, Random.Range(4, 8));
+        }
+
 #if UNITY_EDITOR
         private void OnDrawGizmos()
         {
@@ -96,8 +128,8 @@ namespace KazatanGames.Game
                     gradTime = 127 + Mathf.RoundToInt(Mathf.Clamp(Mathf.InverseLerp(GameModel.Current.Config.outsideEnergy, GameModel.Current.Config.maxEnergy, sdp.Energy), 0f, 1f) * 128f);
                 }
                 Handles.color = gradientLUT[gradTime];
-                Handles.DrawSolidDisc(sdp.Position + new Vector3(1f, -1f, 0f), Vector3.forward, 2f);
-                Handles.Label(sdp.Position, Mathf.Round(sdp.Energy) + "°");
+                Handles.DrawSolidDisc(sdp.Position + new Vector3(2.5f+0.5f, 2.5f, 0), Vector3.forward, 2f);
+                //Handles.Label(sdp.Position + new Vector3(2f, 3f, 0), Mathf.Round(sdp.Energy) + "°");
             }
         }
 #endif

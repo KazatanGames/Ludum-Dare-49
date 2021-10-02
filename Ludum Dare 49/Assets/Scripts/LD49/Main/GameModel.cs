@@ -1,5 +1,4 @@
 ﻿using KazatanGames.Framework;
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -19,9 +18,14 @@ namespace KazatanGames.Game
 
         public float CurrentHeatLevel { get; protected set; } = 0f;
 
+        public List<MoleculeData> Molecules { get; protected set; }
+        public List<MoleculeData> DeadMolecules { get; protected set; }
+
         public void Initialise(GameConfigSO config)
         {
             Config = config;
+            Molecules = new List<MoleculeData>();
+            DeadMolecules = new List<MoleculeData>();
 
             solutionEnergyTickTime = 1f / config.solutionEnergyTicksPerSecond;
 
@@ -56,6 +60,11 @@ namespace KazatanGames.Game
                 solutionEnergyTickTimeRem -= solutionEnergyTickTime;
                 SolutionEnergyTick();
             }
+
+            foreach(MoleculeData md in Molecules)
+            {
+                md.Update(time);
+            }
         }
 
         public void SetHeatLevel(float heatLevel)
@@ -63,12 +72,30 @@ namespace KazatanGames.Game
             CurrentHeatLevel = Mathf.Clamp(heatLevel, 0f, 1f);
         }
 
+        public void AddMolecules(MoleculeTypeSO type, int amount)
+        {
+            while(amount-- > 0)
+            {
+                Molecules.Add(new MoleculeData()
+                {
+                    type = type,
+                    position = new Vector2(Random.Range(0f, Config.visWidth), Config.visHeight),
+                    direction = -90f,
+                    speed = Random.Range(Config.minEntrySpeed, Config.maxEntrySpeed),
+                    energy = Config.outsideEnergy
+                });
+            }
+        }
+
+        public void PurgeTheDead()
+        {
+            DeadMolecules = new List<MoleculeData>();
+        }
+
         protected void SolutionEnergyTick()
         {
             int heatWidth = Mathf.RoundToInt(Mathf.Lerp(Config.minHeat.width, Config.maxHeat.width, CurrentHeatLevel));
             float heatEnergy = Mathf.Lerp(Config.minHeat.addEnergy, Config.maxHeat.addEnergy, CurrentHeatLevel);
-
-            Debug.Log("hw = " + heatWidth + "he = " + heatEnergy);
 
             int heatXMin = (Config.dataWidth - heatWidth) / 2;
             int heatXMax = heatXMin + heatWidth - 1;
