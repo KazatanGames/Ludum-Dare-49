@@ -12,8 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4849b7b50218cd048b270c15e646ff87, type: 3}
   m_Name: AppConfig
   m_EditorClassIdentifier: 
+  version: 1
+  versionCode: 0.0.1
+  releaseBranch: dev
   initialScene:
-    sceneAsset: {fileID: 102900000, guid: 8610d53b3677e0a45adbd02e70302338, type: 3}
-    sceneName: Scenes/TitleScene
+    sceneAsset: {fileID: 102900000, guid: 6f8d3f09b95e0a64e8a9f56e74f05ca8, type: 3}
+    sceneName: Scenes/GameScene
   debugMode: 1
-  skipIntros: 0
+  skipIntros: 1
