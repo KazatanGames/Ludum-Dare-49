@@ -21,6 +21,8 @@ namespace KazatanGames.Game
         public List<MoleculeData> Molecules { get; protected set; }
         public List<MoleculeData> DeadMolecules { get; protected set; }
 
+        protected List<MoleculeData> newMolecules;
+
         public void Initialise(GameConfigSO config)
         {
             Config = config;
@@ -61,9 +63,22 @@ namespace KazatanGames.Game
                 SolutionEnergyTick();
             }
 
-            foreach(MoleculeData md in Molecules)
+            newMolecules = new List<MoleculeData>();
+
+            foreach (MoleculeData md in Molecules)
             {
-                md.Update(time);
+                if (!DeadMolecules.Contains(md))
+                {
+                    md.Update(time);
+                    md.React();
+                }
+            }
+
+            Molecules.AddRange(newMolecules);
+
+            foreach (MoleculeData md in DeadMolecules)
+            {
+                Molecules.Remove(md);
             }
         }
 
@@ -79,8 +94,8 @@ namespace KazatanGames.Game
                 Molecules.Add(new MoleculeData()
                 {
                     type = type,
-                    position = new Vector2(Random.Range(0f, Config.visWidth), Config.visHeight),
-                    direction = -90f,
+                    position = new Vector2(Random.Range(0f, Config.visWidth), Config.visHeight - 0.01f),
+                    angle = 270f,
                     speed = Random.Range(Config.minEntrySpeed, Config.maxEntrySpeed),
                     energy = Config.outsideEnergy
                 });
@@ -90,6 +105,25 @@ namespace KazatanGames.Game
         public void PurgeTheDead()
         {
             DeadMolecules = new List<MoleculeData>();
+        }
+
+        public SolutionDataPoint GetSolutionDataPoint(int x, int y)
+        {
+            x = Mathf.Clamp(x, 0, Config.dataWidth - 1);
+            y = Mathf.Clamp(y, 0, Config.dataHeight - 1);
+            return SolutionDataPoints[(x * Config.dataHeight) + y];
+        }
+
+        public void CreateMolecule(MoleculeTypeSO type, Vector2 position, float angle, float speed, float energy)
+        {
+            newMolecules.Add(new MoleculeData()
+            {
+                type = type,
+                position = position,
+                angle = angle,
+                speed = speed,
+                energy = energy
+            });
         }
 
         protected void SolutionEnergyTick()

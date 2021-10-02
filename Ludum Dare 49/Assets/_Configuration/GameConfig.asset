@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dataWidth: 15
   dataHeight: 19
-  visWidth: 86
-  visHeight: 102
+  visWidth: 81
+  visHeight: 97
   outsideEnergy: 17
   minEnergy: -20
   maxEnergy: 105
@@ -25,6 +25,11 @@ MonoBehaviour:
   heatTransferTop: 0.33
   heatVerticalBias: 5
   globalEffect: 0.25
+  minEntrySpeed: 30
+  maxEntrySpeed: 100
+  speedChangePerEnergy: 3
+  topFlaskDistance: 20
+  reactionDistance: 10
   solutionEnergyTicksPerSecond: 30
   minHeat:
     addEnergy: 2
@@ -35,7 +40,7 @@ MonoBehaviour:
   reactions:
   - input1: {fileID: 11400000, guid: c5b415c2e5c75f94cb1137ea88134c10, type: 2}
     input2: {fileID: 11400000, guid: c5b415c2e5c75f94cb1137ea88134c10, type: 2}
-    minEnergy: 0
-    maxEnergy: 100
-    result: {fileID: 11400000, guid: c5b415c2e5c75f94cb1137ea88134c10, type: 2}
+    minEnergy: 20
+    maxEnergy: 200
+    result: {fileID: 11400000, guid: e0c48830eff45594182e0a7fb314e6a0, type: 2}
     energyCreated: 0

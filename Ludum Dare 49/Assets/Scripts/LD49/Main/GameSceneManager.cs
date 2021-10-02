@@ -64,7 +64,11 @@ namespace KazatanGames.Game
         {
             foreach (MoleculeData md in GameModel.Current.DeadMolecules)
             {
-                moleculeGameObjects.Remove(md);
+                if (moleculeGameObjects.ContainsKey(md))
+                {
+                    Destroy(moleculeGameObjects[md]);
+                    moleculeGameObjects.Remove(md);
+                }
             }
             GameModel.Current.PurgeTheDead();
 
@@ -73,7 +77,7 @@ namespace KazatanGames.Game
                 GameObject mGO;
                 if (!moleculeGameObjects.ContainsKey(md))
                 {
-                    mGO = Instantiate(md.type.moleculePrefab, md.position, Quaternion.AngleAxis(md.direction, Vector3.forward), moleculeContainer);
+                    mGO = Instantiate(md.type.moleculePrefab, md.position, Quaternion.AngleAxis(md.angle, Vector3.forward), moleculeContainer);
                     moleculeGameObjects.Add(md, mGO);
                 }
                 else
@@ -81,7 +85,7 @@ namespace KazatanGames.Game
                     mGO = moleculeGameObjects[md];
                 }
                 mGO.transform.localPosition = md.position;
-                mGO.transform.localRotation = Quaternion.AngleAxis(md.direction, Vector3.forward);
+                mGO.transform.localRotation = Quaternion.AngleAxis(md.angle, Vector3.forward);
             }
         }
 
@@ -128,8 +132,13 @@ namespace KazatanGames.Game
                     gradTime = 127 + Mathf.RoundToInt(Mathf.Clamp(Mathf.InverseLerp(GameModel.Current.Config.outsideEnergy, GameModel.Current.Config.maxEnergy, sdp.Energy), 0f, 1f) * 128f);
                 }
                 Handles.color = gradientLUT[gradTime];
-                Handles.DrawSolidDisc(sdp.Position + new Vector3(2.5f+0.5f, 2.5f, 0), Vector3.forward, 2f);
+                Handles.DrawWireDisc(sdp.Position + new Vector3(2.5f+0.5f, 2.5f, 0), Vector3.forward, 2f);
                 //Handles.Label(sdp.Position + new Vector3(2f, 3f, 0), Mathf.Round(sdp.Energy) + "°");
+            }
+
+            foreach(MoleculeData md in GameModel.Current.Molecules)
+            {
+                Handles.Label(new Vector3(md.position.x, md.position.y, 0f), Mathf.Round(md.energy) + "°");
             }
         }
 #endif

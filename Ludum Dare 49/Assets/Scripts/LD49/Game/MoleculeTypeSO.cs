@@ -13,5 +13,6 @@ namespace KazatanGames.Game
     {
         public string title;
         public GameObject moleculePrefab;
+        public float energiseMulti = 0.5f;
     }
 }

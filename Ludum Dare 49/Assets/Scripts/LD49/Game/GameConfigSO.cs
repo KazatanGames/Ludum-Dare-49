@@ -31,6 +31,12 @@ namespace KazatanGames.Game
         public float minEntrySpeed = 5f;
         public float maxEntrySpeed = 15f;
 
+        public float speedChangePerEnergy = 0f;
+
+        public float topFlaskDistance = 20f;
+
+        public float reactionDistance = 10f;
+
         [Range(1, 240)]
         public int solutionEnergyTicksPerSecond = 1;
 
