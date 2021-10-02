@@ -47,17 +47,8 @@ namespace KazatanGames.Game
 
         public void CalculateEnergyTransfer()
         {
-            CalcTransferToNeighbour(nU, GameDirection2D.Up);
-            CalcTransferToNeighbour(nD, GameDirection2D.Down);
-            CalcTransferToNeighbour(nL, GameDirection2D.Left);
-            CalcTransferToNeighbour(nR, GameDirection2D.Right);
             if (side) CalcLoseToSide();
             if (top) CalcLoseToTop();
-
-            if (X == 5 && Y == 5)
-            {
-                Debug.Log($"{energyChange}");
-            }
         }
 
         public bool ShouldBeHeated()
@@ -78,31 +69,16 @@ namespace KazatanGames.Game
             if (Y < GameModel.Current.Config.dataHeight - 1) nU = neighbours[(X * GameModel.Current.Config.dataHeight) + (Y + 1)];
         }
 
-        // only calculate energy we _send_ to our neighbours as they do the same for us
-        protected void CalcTransferToNeighbour(SolutionDataPoint n, GameDirection2D d)
-        {
-            if (n == null) return;
-
-            float dE = (Energy - n.Energy) * 0.25f;
-
-            //dE = Mathf.Max(dE, 0f);
-
-            energyChange += dE;
-            //n.ReceiveEnergy(dE);
-        }
-
         protected void CalcLoseToSide()
         {
-            float dE = (Energy - GameModel.Current.Config.outsideEnergy) * 0.25f;
-            // dE = Mathf.Max(dE, 0f);
-            energyChange += dE;
+            float dE = (Energy - GameModel.Current.Config.outsideEnergy) * GameModel.Current.Config.heatTransferSide;
+            energyChange -= dE;
         }
 
         protected void CalcLoseToTop()
         {
-            float dE = (Energy - GameModel.Current.Config.outsideEnergy) * 0.25f;
-            // dE = Mathf.Max(dE, 0f);
-            energyChange += dE;
+            float dE = (Energy - GameModel.Current.Config.outsideEnergy) * GameModel.Current.Config.heatTransferSide;
+            energyChange -= dE;
         }
 
     }
