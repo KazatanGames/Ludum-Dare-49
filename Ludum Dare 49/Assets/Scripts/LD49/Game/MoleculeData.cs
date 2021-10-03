@@ -186,9 +186,12 @@ namespace KazatanGames.Game
 
             energy += (NearestSolutionPoint.Energy - energy) * type.energiseMulti * time;
 
-            // add speed based on energy level
-            speed += GameModel.Current.Config.speedChangePerEnergy * (energy - GameModel.Current.Config.outsideEnergy) * type.energeticSpeedMulti * time;
-            speed = Mathf.Max(speed, 0f);
+            if (!GameModel.Current.GlassCracked)
+            {
+                // add speed based on energy level
+                speed += GameModel.Current.Config.speedChangePerEnergy * (energy - GameModel.Current.Config.outsideEnergy) * type.energeticSpeedMulti * time;
+                speed = Mathf.Max(speed, 0f);
+            }
 
             // TODO: also find a direction travel should be encouraged in
 

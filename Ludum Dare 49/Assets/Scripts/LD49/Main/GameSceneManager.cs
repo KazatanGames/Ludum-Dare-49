@@ -17,6 +17,10 @@ namespace KazatanGames.Game
         [SerializeField]
         protected GameObject reactionParticlePrefab;
         [SerializeField]
+        protected GameObject icePrefab;
+        [SerializeField]
+        protected GameObject smokePrefab;
+        [SerializeField]
         protected Light burnerLight;
 
         [SerializeField]
@@ -40,6 +44,10 @@ namespace KazatanGames.Game
 
         protected Dictionary<MoleculeData, GameObject> moleculeGameObjects;
 
+        protected bool gameOver = false;
+
+        protected GameObject gameOverObject;
+
         protected override void Initialise()
         {
             moleculeGameObjects = new Dictionary<MoleculeData, GameObject>();
@@ -61,6 +69,25 @@ namespace KazatanGames.Game
 
         protected void Update()
         {
+            if (gameOver != GameModel.Current.GlassCracked)
+            {
+                gameOver = GameModel.Current.GlassCracked;
+                if (gameOver)
+                {
+                    if (GameModel.Current.GameOverFrozen)
+                    {
+                        gameOverObject = Instantiate(icePrefab);
+                    } else
+                    {
+                        gameOverObject = Instantiate(smokePrefab);
+                    }
+                } else
+                {
+                    Destroy(gameOverObject);
+                    gameOverObject = null;
+                }
+            }
+
             if (GameModel.Current.ResetInvalidated) ResetVis();
             
             GameModel.Current.Update(Time.deltaTime);
@@ -143,6 +170,9 @@ namespace KazatanGames.Game
             moleculeGameObjects = new Dictionary<MoleculeData, GameObject>();
 
             GameModel.Current.ResetInvalidated = false;
+
+            Destroy(gameOverObject);
+            gameOverObject = null;
         }
 
 #if UNITY_EDITOR

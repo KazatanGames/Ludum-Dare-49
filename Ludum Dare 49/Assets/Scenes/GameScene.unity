@@ -2796,6 +2796,10 @@ MonoBehaviour:
   heatParticleSystem: {fileID: 1772059068}
   reactionParticlePrefab: {fileID: 4177133972413175005, guid: 4e785d7e8bab7df4a8690996c38e4df4,
     type: 3}
+  icePrefab: {fileID: 3777731306123965222, guid: 722d64cb7f13f064498f2c0a89df1ec1,
+    type: 3}
+  smokePrefab: {fileID: 3777731306123965222, guid: c2c00e59822800b4a83a21fb77dc04d5,
+    type: 3}
   burnerLight: {fileID: 16729472}
   gameConfig: {fileID: 11400000, guid: c99ba101a1f8fc84f9096867fc0be3cb, type: 2}
   debugSolutionGradient:

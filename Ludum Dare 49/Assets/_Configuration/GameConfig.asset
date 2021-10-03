@@ -31,8 +31,8 @@ MonoBehaviour:
   topFlaskDistance: 20
   reactionDistance: 10
   minSolutionEnergy: -10
-  maxSolutionEnergy: 110
-  hotSolutionEnergyWarn: 80
+  maxSolutionEnergy: 60
+  hotSolutionEnergyWarn: 50
   coldSolutionEnergyWarn: 0
   crackSlowDownTime: 1
   burnerFlickerDistance: 0.25
