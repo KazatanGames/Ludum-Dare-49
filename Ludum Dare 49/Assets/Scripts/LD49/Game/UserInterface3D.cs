@@ -84,7 +84,7 @@ namespace KazatanGames.Game
                 }
                 else
                 {
-                    return "OK";
+                    return "Stable";
                 }
             }
         }

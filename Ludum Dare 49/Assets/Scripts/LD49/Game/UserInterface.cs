@@ -25,16 +25,20 @@ namespace KazatanGames.Game
         protected RectTransform targetsUIContainer;
 
         [SerializeField]
-        protected Button addYButton;
-        [SerializeField]
         protected Button addRButton;
+        [SerializeField]
+        protected Button addGButton;
+        [SerializeField]
+        protected Button addBButton;
         [SerializeField]
         protected Slider heatSlider;
 
         [SerializeField]
-        protected MoleculeTypeSO moleculesToAddY;
-        [SerializeField]
         protected MoleculeTypeSO moleculesToAddR;
+        [SerializeField]
+        protected MoleculeTypeSO moleculesToAddG;
+        [SerializeField]
+        protected MoleculeTypeSO moleculesToAddB;
 
         protected bool uiEnabled = true;
 
@@ -45,18 +49,25 @@ namespace KazatanGames.Game
             GameModel.Current.SetHeatLevel(value);
         }
 
-        public void AddMoleculesY()
-        {
-            if (GameModel.Current.GlassCracked) return;
-
-            GameModel.Current.AddMolecules(moleculesToAddY, Random.Range(4, 8));
-            GameModel.Current.KnownReactionsInvalidated = true;
-        }
         public void AddMoleculesR()
         {
             if (GameModel.Current.GlassCracked) return;
 
             GameModel.Current.AddMolecules(moleculesToAddR, Random.Range(4, 8));
+        }
+
+        public void AddMoleculesG()
+        {
+            if (GameModel.Current.GlassCracked) return;
+
+            GameModel.Current.AddMolecules(moleculesToAddG, Random.Range(4, 8));
+        }
+
+        public void AddMoleculesB()
+        {
+            if (GameModel.Current.GlassCracked) return;
+
+            GameModel.Current.AddMolecules(moleculesToAddB, Random.Range(4, 8));
         }
 
         public void ResetFlask()
@@ -82,8 +93,9 @@ namespace KazatanGames.Game
                 uiEnabled = !GameModel.Current.GlassCracked;
 
                 heatSlider.value = GameModel.Current.CurrentHeatLevel;
-                addYButton.interactable = uiEnabled;
                 addRButton.interactable = uiEnabled;
+                addGButton.interactable = uiEnabled;
+                addBButton.interactable = uiEnabled;
                 heatSlider.interactable = uiEnabled;
             }
 

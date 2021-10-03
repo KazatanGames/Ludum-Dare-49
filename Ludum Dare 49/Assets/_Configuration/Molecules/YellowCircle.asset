@@ -13,8 +13,10 @@ MonoBehaviour:
   m_Name: YellowCircle
   m_EditorClassIdentifier: 
   title: Yellow Circle
-  moleculePrefab: {fileID: 2844902137024251639, guid: ba1247a98bac44c4b83bc3538666cab5,
+  moleculePrefab: {fileID: 2844902137024251639, guid: 1b4a6e7502574374faecb99556e2a063,
     type: 3}
   sprite: {fileID: 21300000, guid: 9e72629c961cf4e4986f012bc361b1f6, type: 3}
-  energiseMulti: 0.5
+  energiseWobbleMulti: 0.75
   energeticSpeedMulti: 1
+  energiseEnergyMin: 16.75
+  energyAcclimatisationSpeed: 4

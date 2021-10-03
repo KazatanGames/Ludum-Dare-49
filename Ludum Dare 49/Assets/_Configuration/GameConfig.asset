@@ -31,8 +31,8 @@ MonoBehaviour:
   topFlaskDistance: 20
   reactionDistance: 10
   minSolutionEnergy: -10
-  maxSolutionEnergy: 60
-  hotSolutionEnergyWarn: 50
+  maxSolutionEnergy: 110
+  hotSolutionEnergyWarn: 80
   coldSolutionEnergyWarn: 0
   crackSlowDownTime: 1
   burnerFlickerDistance: 0.25
@@ -44,28 +44,38 @@ MonoBehaviour:
     addEnergy: 15
     width: 7
   reactions:
-  - input1: {fileID: 11400000, guid: c5b415c2e5c75f94cb1137ea88134c10, type: 2}
+  - input1: {fileID: 11400000, guid: 01d77d2cf5fb534408969df1ba08e1c5, type: 2}
     input2: {fileID: 11400000, guid: c5b415c2e5c75f94cb1137ea88134c10, type: 2}
-    minEnergy: 22
+    minEnergy: 30
+    maxEnergy: 200
+    results:
+    - {fileID: 11400000, guid: d3050dddb2740e84eae239df9b8ea3f3, type: 2}
+    energyCreated: -50
+  - input1: {fileID: 11400000, guid: d3050dddb2740e84eae239df9b8ea3f3, type: 2}
+    input2: {fileID: 11400000, guid: d3050dddb2740e84eae239df9b8ea3f3, type: 2}
+    minEnergy: 60
     maxEnergy: 200
     results:
     - {fileID: 11400000, guid: e0c48830eff45594182e0a7fb314e6a0, type: 2}
-    energyCreated: -10
+    energyCreated: 1000
   - input1: {fileID: 11400000, guid: e0c48830eff45594182e0a7fb314e6a0, type: 2}
-    input2: {fileID: 11400000, guid: 01d77d2cf5fb534408969df1ba08e1c5, type: 2}
-    minEnergy: 42
-    maxEnergy: 200
-    results:
-    - {fileID: 11400000, guid: f188eb794316f23439acd8de912163ab, type: 2}
-    - {fileID: 11400000, guid: 01d77d2cf5fb534408969df1ba08e1c5, type: 2}
-    energyCreated: 300
-  - input1: {fileID: 11400000, guid: f188eb794316f23439acd8de912163ab, type: 2}
-    input2: {fileID: 11400000, guid: f188eb794316f23439acd8de912163ab, type: 2}
+    input2: {fileID: 11400000, guid: 27e0699db4e930f44954b3463d71cd3f, type: 2}
     minEnergy: -100
-    maxEnergy: 200
+    maxEnergy: 40
     results:
-    - {fileID: 11400000, guid: 73db08badbfb4194cb91c10117a98b78, type: 2}
-    energyCreated: -50000
+    - {fileID: 11400000, guid: d3050dddb2740e84eae239df9b8ea3f3, type: 2}
+    - {fileID: 11400000, guid: d3050dddb2740e84eae239df9b8ea3f3, type: 2}
+    - {fileID: 11400000, guid: 27e0699db4e930f44954b3463d71cd3f, type: 2}
+    energyCreated: -2000
+  - input1: {fileID: 11400000, guid: 27e0699db4e930f44954b3463d71cd3f, type: 2}
+    input2: {fileID: 11400000, guid: 27e0699db4e930f44954b3463d71cd3f, type: 2}
+    minEnergy: -100
+    maxEnergy: 15
+    results:
+    - {fileID: 11400000, guid: aa54e4e8a4d034846a9459efbd463262, type: 2}
+    energyCreated: -2000
   targets:
   - type: {fileID: 11400000, guid: e0c48830eff45594182e0a7fb314e6a0, type: 2}
-    points: 5
+    points: 1
+  - type: {fileID: 11400000, guid: aa54e4e8a4d034846a9459efbd463262, type: 2}
+    points: 2

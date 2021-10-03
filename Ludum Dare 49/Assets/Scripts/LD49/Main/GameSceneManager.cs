@@ -15,6 +15,8 @@ namespace KazatanGames.Game
         [SerializeField]
         protected ParticleSystem heatParticleSystem;
         [SerializeField]
+        protected ParticleSystem bubblesParticleSystem;
+        [SerializeField]
         protected GameObject reactionParticlePrefab;
         [SerializeField]
         protected GameObject icePrefab;
@@ -22,6 +24,10 @@ namespace KazatanGames.Game
         protected GameObject smokePrefab;
         [SerializeField]
         protected Light burnerLight;
+        [SerializeField]
+        protected AudioSource bubblesAudio;
+        [SerializeField]
+        protected AudioSource flameAudio;
 
         [SerializeField]
         protected GameConfigSO gameConfig;
@@ -32,10 +38,16 @@ namespace KazatanGames.Game
         protected int minParticlesPerSecond = 20;
         [SerializeField]
         protected int maxParticlesPerSecond = 40;
+        [SerializeField]
+        protected int bubblesPerSecondMax = 20;
+        [SerializeField]
+        protected float bubbleStartEnergy = 30f;
 
         protected Color[] gradientLUT;
-        protected float particleTimeRem = 0f;
-        protected ParticleSystem.MainModule psMain;
+        protected float particleTimeRemHeat = 0f;
+        protected float particleTimeRemBubbles = 0f;
+        protected ParticleSystem.MainModule psMainHeat;
+        protected ParticleSystem.MainModule psMainBubbles;
 
         protected float lightFlickerTime = 0f;
         protected Vector3 lightFlickerTarget;
@@ -62,7 +74,8 @@ namespace KazatanGames.Game
 
             GameModel.Current.Initialise(gameConfig);
 
-            psMain = heatParticleSystem.main;
+            psMainHeat = heatParticleSystem.main;
+            psMainBubbles = bubblesParticleSystem.main;
 
             lightFlickerOriginal = lightFlickerOld = burnerLight.transform.localPosition;
         }
@@ -128,15 +141,43 @@ namespace KazatanGames.Game
         protected void DrawFlame()
         {
             if (GameModel.Current.CurrentHeatLevel > 0) {
-                psMain.startColor = Color.Lerp(Color.yellow, Color.white, GameModel.Current.CurrentHeatLevel);
+                psMainHeat.startColor = Color.Lerp(Color.yellow, Color.white, GameModel.Current.CurrentHeatLevel);
 
                 float timePerEmit = 1f / Mathf.Lerp(minParticlesPerSecond, maxParticlesPerSecond, GameModel.Current.CurrentHeatLevel);
-                particleTimeRem += Time.deltaTime;
+                particleTimeRemHeat += Time.deltaTime;
 
-                int particlesToEmit = Mathf.FloorToInt(particleTimeRem / timePerEmit);
+                int particlesToEmit = Mathf.FloorToInt(particleTimeRemHeat / timePerEmit);
 
                 heatParticleSystem.Emit(particlesToEmit);
-                particleTimeRem -= timePerEmit * particlesToEmit;
+                particleTimeRemHeat -= timePerEmit * particlesToEmit;
+
+                flameAudio.volume = Mathf.Lerp(0.5f, 1f, GameModel.Current.CurrentHeatLevel);
+            } else
+            {
+                flameAudio.volume = 0f;
+            }
+
+            if (GameModel.Current.SolutionEnergy > bubbleStartEnergy)
+            {
+                particleTimeRemBubbles += Time.deltaTime;
+
+                float bubbleRatio = Mathf.Clamp(Mathf.InverseLerp(bubbleStartEnergy, gameConfig.maxSolutionEnergy, GameModel.Current.SolutionEnergy), 0f, 1f);
+
+                bubblesAudio.volume = bubbleRatio;
+                if (bubbleRatio > 0)
+                {
+                    float bubblesDesired = bubblesPerSecondMax * bubbleRatio;
+                    float timePerEmit = 1f / bubblesDesired;
+
+                    int particlesToEmit = Mathf.FloorToInt(particleTimeRemBubbles / timePerEmit);
+
+                    bubblesParticleSystem.Emit(particlesToEmit);
+                    particleTimeRemBubbles -= timePerEmit * particlesToEmit;
+                }
+            } else
+            {
+                bubblesAudio.volume = 0;
+                particleTimeRemBubbles = 0f;
             }
 
             lightFlickerTime -= Time.deltaTime;
@@ -170,6 +211,9 @@ namespace KazatanGames.Game
             moleculeGameObjects = new Dictionary<MoleculeData, GameObject>();
 
             GameModel.Current.ResetInvalidated = false;
+
+            bubblesParticleSystem.Clear();
+            heatParticleSystem.Clear();
 
             Destroy(gameOverObject);
             gameOverObject = null;

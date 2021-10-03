@@ -14,7 +14,9 @@ namespace KazatanGames.Game
         public string title;
         public GameObject moleculePrefab;
         public Sprite sprite;
-        public float energiseMulti = 0.5f;
+        public float energiseWobbleMulti = 0.5f;
         public float energeticSpeedMulti = 1f;
+        public float energiseEnergyMin = 17f;
+        public float energyAcclimatisationSpeed = 1f;
     }
 }

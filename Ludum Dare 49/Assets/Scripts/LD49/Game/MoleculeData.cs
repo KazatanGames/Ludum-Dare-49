@@ -57,6 +57,11 @@ namespace KazatanGames.Game
                     if (reaction.minEnergy > md.energy || reaction.maxEnergy < md.energy) continue;
                     if (reaction.input1 == type && reaction.input2 != md.type) continue;
                     if (reaction.input2 == type && reaction.input1 != md.type) continue;
+
+                    // the reaction could happen
+                    if (reaction.bigEndothermic) GameModel.Current.Endothermics++;
+                    if (reaction.bigExothermic) GameModel.Current.Exothermics++;
+
                     if (Vector2.Distance(position, md.position) > GameModel.Current.Config.reactionDistance) continue;
 
                     reactedReaction = reaction;
@@ -184,12 +189,12 @@ namespace KazatanGames.Game
         {
             // find the closest heat point and energise towards that energy level
 
-            energy += (NearestSolutionPoint.Energy - energy) * type.energiseMulti * time;
+            energy = Mathf.MoveTowards(energy, NearestSolutionPoint.Energy, type.energyAcclimatisationSpeed * time);
 
             if (!GameModel.Current.GlassCracked)
             {
                 // add speed based on energy level
-                speed += GameModel.Current.Config.speedChangePerEnergy * (energy - GameModel.Current.Config.outsideEnergy) * type.energeticSpeedMulti * time;
+                speed += GameModel.Current.Config.speedChangePerEnergy * (energy - type.energiseEnergyMin) * type.energeticSpeedMulti * time;
                 speed = Mathf.Max(speed, 0f);
             }
 
@@ -198,11 +203,11 @@ namespace KazatanGames.Game
             // Z
             if (zDir)
             {
-                zRatio += (energy - GameModel.Current.Config.outsideEnergy + 0.1f) * time * type.energiseMulti;
+                zRatio += (energy - type.energiseEnergyMin + 0.1f) * time * type.energiseWobbleMulti;
                 if (zRatio >= 1f) zDir = false;
             } else
             {
-                zRatio -= (energy - GameModel.Current.Config.outsideEnergy + 0.1f) * time * type.energiseMulti;
+                zRatio -= (energy - type.energiseEnergyMin + 0.1f) * time * type.energiseWobbleMulti;
                 if (zRatio <= 0f) zDir = true;
             }
 

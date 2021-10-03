@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3e4494c126c93c44bb4b8f9cebaa3e2, type: 3}
+  m_Name: GreenCircle
+  m_EditorClassIdentifier: 
+  title: Green Circle
+  moleculePrefab: {fileID: 2844902137024251639, guid: ba1247a98bac44c4b83bc3538666cab5,
+    type: 3}
+  sprite: {fileID: 21300000, guid: d88b89cd3cf13c944bee1e9845980bc6, type: 3}
+  energiseWobbleMulti: 0.75
+  energeticSpeedMulti: 1
+  energiseEnergyMin: 16.75
+  energyAcclimatisationSpeed: 4
