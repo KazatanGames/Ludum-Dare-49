@@ -18,7 +18,11 @@ namespace KazatanGames.Game
         [SerializeField]
         protected KnownReactionRow knownReactionRowPrefab;
         [SerializeField]
+        protected TargetsRow targetRowPrefab;
+        [SerializeField]
         protected RectTransform reactionsUIContainer;
+        [SerializeField]
+        protected RectTransform targetsUIContainer;
 
         [SerializeField]
         protected Button addYButton;
@@ -58,6 +62,17 @@ namespace KazatanGames.Game
         public void ResetFlask()
         {
             GameModel.Current.Reset();
+            heatSlider.value = GameModel.Current.CurrentHeatLevel;
+        }
+
+        private void Start()
+        {
+            // create targets
+            foreach(TargetStruct t in GameModel.Current.Config.targets)
+            {
+                TargetsRow tr = Instantiate(targetRowPrefab, targetsUIContainer);
+                tr.SetType(t.type);
+            }
         }
 
         private void LateUpdate()

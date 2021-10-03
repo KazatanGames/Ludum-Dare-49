@@ -22,15 +22,12 @@ namespace KazatanGames.Game
         protected void LateUpdate()
         {
             if (type == null) return;
-
-            // TODO: Count
-            txt.text = "0";
+            txt.text = GameModel.Current.GetCreatedCount(type).ToString("F0");
         }
 
         public void SetType(MoleculeTypeSO type)
         {
             this.type = type;
-
             img.sprite = type.sprite;
         }
     }

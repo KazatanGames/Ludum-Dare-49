@@ -74,6 +74,13 @@ namespace KazatanGames.Game
                 foreach(MoleculeTypeSO mType in reactedReaction.results)
                 {
                     GameModel.Current.CreateMolecule(mType, (position + reactee.position) / 2f, Random.Range(0f, 360f), (speed + reactee.speed) / 2f, (energy + reactee.energy) / 2f);
+                    foreach(TargetStruct target in GameModel.Current.Config.targets)
+                    {
+                        if (target.type == mType)
+                        {
+                            GameModel.Current.AddScore(target.points);
+                        }
+                    }
                 }
                 GameModel.Current.ReactionLocations.Add((position + reactee.position) / 2f);
                 if (!GameModel.Current.KnownReactions.Contains(reactedReaction))

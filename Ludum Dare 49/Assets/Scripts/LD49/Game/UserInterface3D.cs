@@ -108,7 +108,7 @@ namespace KazatanGames.Game
         {
             get
             {
-                return GameModel.Current.Score;
+                return GameModel.Current.Score.ToString("F0");
             }
         }
     }

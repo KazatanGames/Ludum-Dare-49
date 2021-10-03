@@ -8,6 +8,7 @@ using UnityEngine;
  */
 namespace KazatanGames.Game
 {
+    [Serializable]
     public struct TargetStruct
     {
         public MoleculeTypeSO type;

@@ -32,6 +32,8 @@ MonoBehaviour:
   reactionDistance: 10
   minSolutionEnergy: -10
   maxSolutionEnergy: 110
+  hotSolutionEnergyWarn: 85
+  coldSolutionEnergyWarn: 0
   crackSlowDownTime: 1
   solutionEnergyTicksPerSecond: 240
   minHeat:
@@ -63,3 +65,6 @@ MonoBehaviour:
     results:
     - {fileID: 11400000, guid: 73db08badbfb4194cb91c10117a98b78, type: 2}
     energyCreated: -50000
+  targets:
+  - type: {fileID: 11400000, guid: e0c48830eff45594182e0a7fb314e6a0, type: 2}
+    points: 5

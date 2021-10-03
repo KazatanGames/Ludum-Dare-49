@@ -33,6 +33,8 @@ namespace KazatanGames.Game
 
         public int Score { get; protected set; } = 0;
 
+        public Dictionary<MoleculeTypeSO, int> CreatedCounts { get; protected set; }
+
         protected List<MoleculeData> newMolecules;
         public float SolutionEnergy { get; protected set; }
 
@@ -106,6 +108,8 @@ namespace KazatanGames.Game
         {
             if (GlassCracked) return;
 
+            AddCreatedCount(type, amount);
+
             while (amount-- > 0)
             {
                 Molecules.Add(new MoleculeData()
@@ -134,6 +138,8 @@ namespace KazatanGames.Game
         public void CreateMolecule(MoleculeTypeSO type, Vector2 position, float angularSpeed, float speed, float energy)
         {
             if (GlassCracked) return;
+
+            AddCreatedCount(type, 1);
 
             newMolecules.Add(new MoleculeData()
             {
@@ -181,12 +187,34 @@ namespace KazatanGames.Game
             GameOverCombust = false;
             KnownReactionsInvalidated = true;
             Score = 0;
+            CreatedCounts = new Dictionary<MoleculeTypeSO, int>();
 
             Time.timeScale = 1f;
 
             timeSlowDownTime = 0f;
 
             ResetInvalidated = true;
+        }
+
+        public int GetCreatedCount(MoleculeTypeSO type)
+        {
+            if (CreatedCounts.ContainsKey(type))
+            {
+                return CreatedCounts[type];
+            }
+            return 0;
+        }
+
+        protected void AddCreatedCount(MoleculeTypeSO type, int amount)
+        {
+            if (CreatedCounts.ContainsKey(type))
+            {
+                CreatedCounts[type] = CreatedCounts[type] + amount;
+            }
+            else
+            {
+                CreatedCounts.Add(type, amount);
+            }
         }
 
         protected void SolutionEnergyTick()
