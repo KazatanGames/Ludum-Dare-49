@@ -30,7 +30,10 @@ MonoBehaviour:
   speedChangePerEnergy: 3
   topFlaskDistance: 20
   reactionDistance: 10
-  solutionEnergyTicksPerSecond: 30
+  minSolutionEnergy: -10
+  maxSolutionEnergy: 110
+  crackSlowDownTime: 1
+  solutionEnergyTicksPerSecond: 240
   minHeat:
     addEnergy: 2
     width: 1
@@ -52,11 +55,11 @@ MonoBehaviour:
     results:
     - {fileID: 11400000, guid: f188eb794316f23439acd8de912163ab, type: 2}
     - {fileID: 11400000, guid: 01d77d2cf5fb534408969df1ba08e1c5, type: 2}
-    energyCreated: -50
+    energyCreated: 300
   - input1: {fileID: 11400000, guid: f188eb794316f23439acd8de912163ab, type: 2}
     input2: {fileID: 11400000, guid: f188eb794316f23439acd8de912163ab, type: 2}
-    minEnergy: 20
+    minEnergy: -100
     maxEnergy: 200
     results:
     - {fileID: 11400000, guid: 73db08badbfb4194cb91c10117a98b78, type: 2}
-    energyCreated: -2000
+    energyCreated: -50000

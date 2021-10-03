@@ -18,8 +18,17 @@ namespace KazatanGames.Game
         public float turnSpeed = 0f;
 
         public float energy = 0f;
+        public float z = 0f;
+        protected float zRatio = 0f;
+        protected bool zDir = false;
 
         protected bool rotationDirectionCCW = false;
+
+        public MoleculeData()
+        {
+            zRatio = Random.Range(0f, 1f);
+            zDir = Random.value < 0.5f;
+        }
 
         public void Update(float time)
         {
@@ -175,6 +184,21 @@ namespace KazatanGames.Game
             speed = Mathf.Max(speed, 0f);
 
             // TODO: also find a direction travel should be encouraged in
+
+            // Z
+            if (zDir)
+            {
+                zRatio += (energy - GameModel.Current.Config.outsideEnergy + 0.1f) * time * type.energiseMulti;
+                if (zRatio >= 1f) zDir = false;
+            } else
+            {
+                zRatio -= (energy - GameModel.Current.Config.outsideEnergy + 0.1f) * time * type.energiseMulti;
+                if (zRatio <= 0f) zDir = true;
+            }
+
+            zRatio = Mathf.Clamp(zRatio, 0f, 1f);
+
+            z = 2.5f - Easing.Cubic.InOut(zRatio) * 5f;
         }
     }
 }

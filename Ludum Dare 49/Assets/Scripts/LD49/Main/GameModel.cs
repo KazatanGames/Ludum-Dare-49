@@ -23,50 +23,50 @@ namespace KazatanGames.Game
 
         public List<Vector3> ReactionLocations { get; protected set; } = new List<Vector3>();
 
-        public List<ReactionStruct> KnownReactions { get; protected set; }
+        public List<ReactionStruct> KnownReactions { get; protected set; } = new List<ReactionStruct>();
         public bool KnownReactionsInvalidated { get; set; } = true;
 
+        public bool GlassCracked { get; protected set; } = false;
+        public bool GameOverFrozen { get; protected set; } = false;
+        public bool GameOverCombust { get; protected set; } = false;
+        public bool ResetInvalidated { get; set; } = false;
+
+        public int Score { get; protected set; } = 0;
+
         protected List<MoleculeData> newMolecules;
+        public float SolutionEnergy { get; protected set; }
+
+        protected float timeSlowDownTime = 0f;
 
         public void Initialise(GameConfigSO config)
         {
             Config = config;
-            Molecules = new List<MoleculeData>();
-            DeadMolecules = new List<MoleculeData>();
-            KnownReactions = new List<ReactionStruct>();
-
-            solutionEnergyTickTime = 1f / config.solutionEnergyTicksPerSecond;
-
-            SolutionDataPoints = new SolutionDataPoint[Config.dataWidth * Config.dataHeight];
-
-            // create
-            for (int y = 0; y < Config.dataHeight; y++)
-            {
-                for (int x = 0; x < Config.dataWidth; x++)
-                {
-                    bool side = x == 0 || x == (Config.dataWidth - 1);
-                    bool top = y == (Config.dataHeight - 1);
-                    SolutionDataPoint sdp = new SolutionDataPoint(x, y, side, top);
-                    SolutionDataPoints[(x * Config.dataHeight) + y] = sdp;
-                }
-            }
-
-            // set neighbours
-            foreach(SolutionDataPoint sdp in SolutionDataPoints)
-            {
-                sdp.FindNeighbours(SolutionDataPoints);
-            }
+            Reset();
         }
 
         public void Update(float time)
         {
-            solutionEnergyTickTime = 1f / Config.solutionEnergyTicksPerSecond;
-            solutionEnergyTickTimeRem += time;
-
-            while (solutionEnergyTickTimeRem >= solutionEnergyTickTime)
+            if (GlassCracked && timeSlowDownTime < Config.crackSlowDownTime)
             {
-                solutionEnergyTickTimeRem -= solutionEnergyTickTime;
-                SolutionEnergyTick();
+                timeSlowDownTime += time;
+                Time.timeScale = 1f - (0.98f * Easing.Quadratic.Out(timeSlowDownTime / Config.crackSlowDownTime));
+
+                float newHeatLevel = 1f - Easing.Quadratic.Out(timeSlowDownTime / Config.crackSlowDownTime);
+                if (newHeatLevel < CurrentHeatLevel) SetHeatLevel(newHeatLevel);
+            }
+
+            if (!GlassCracked)
+            {
+
+                solutionEnergyTickTime = 1f / Config.solutionEnergyTicksPerSecond;
+                solutionEnergyTickTimeRem += time;
+
+                while (solutionEnergyTickTimeRem >= solutionEnergyTickTime)
+                {
+                    solutionEnergyTickTimeRem -= solutionEnergyTickTime;
+                    SolutionEnergyTick();
+                }
+
             }
 
             newMolecules = new List<MoleculeData>();
@@ -76,7 +76,7 @@ namespace KazatanGames.Game
                 if (!DeadMolecules.Contains(md))
                 {
                     md.Update(time);
-                    md.React();
+                    if (!GlassCracked) md.React();
                 }
             }
 
@@ -86,6 +86,10 @@ namespace KazatanGames.Game
             {
                 Molecules.Remove(md);
             }
+
+            if (GlassCracked) return;
+
+            CheckForCrack();
         }
 
         public void SetHeatLevel(float heatLevel)
@@ -93,9 +97,16 @@ namespace KazatanGames.Game
             CurrentHeatLevel = Mathf.Clamp(heatLevel, 0f, 1f);
         }
 
+        public void AddScore(int plus)
+        {
+            Score += plus;
+        }
+
         public void AddMolecules(MoleculeTypeSO type, int amount)
         {
-            while(amount-- > 0)
+            if (GlassCracked) return;
+
+            while (amount-- > 0)
             {
                 Molecules.Add(new MoleculeData()
                 {
@@ -122,6 +133,8 @@ namespace KazatanGames.Game
 
         public void CreateMolecule(MoleculeTypeSO type, Vector2 position, float angularSpeed, float speed, float energy)
         {
+            if (GlassCracked) return;
+
             newMolecules.Add(new MoleculeData()
             {
                 type = type,
@@ -130,6 +143,50 @@ namespace KazatanGames.Game
                 speed = speed,
                 energy = energy
             });
+        }
+
+        public void Reset()
+        {
+            Molecules = new List<MoleculeData>();
+            DeadMolecules = new List<MoleculeData>();
+
+            SolutionEnergy = Config.outsideEnergy;
+
+            solutionEnergyTickTime = 1f / Config.solutionEnergyTicksPerSecond;
+
+            SolutionDataPoints = new SolutionDataPoint[Config.dataWidth * Config.dataHeight];
+
+            // create
+            for (int y = 0; y < Config.dataHeight; y++)
+            {
+                for (int x = 0; x < Config.dataWidth; x++)
+                {
+                    bool side = x == 0 || x == (Config.dataWidth - 1);
+                    bool top = y == (Config.dataHeight - 1);
+                    SolutionDataPoint sdp = new SolutionDataPoint(x, y, side, top);
+                    SolutionDataPoints[(x * Config.dataHeight) + y] = sdp;
+                }
+            }
+
+            // set neighbours
+            foreach (SolutionDataPoint sdp in SolutionDataPoints)
+            {
+                sdp.FindNeighbours(SolutionDataPoints);
+            }
+
+            ReactionLocations = new List<Vector3>();
+            CurrentHeatLevel = 0;
+            GlassCracked = false;
+            GameOverFrozen = false;
+            GameOverCombust = false;
+            KnownReactionsInvalidated = true;
+            Score = 0;
+
+            Time.timeScale = 1f;
+
+            timeSlowDownTime = 0f;
+
+            ResetInvalidated = true;
         }
 
         protected void SolutionEnergyTick()
@@ -146,10 +203,10 @@ namespace KazatanGames.Game
             {
                 globalEffect += sdp.Energy;
             }
-            float globalAverage = globalEffect / SolutionDataPoints.Length;
+            SolutionEnergy = globalEffect / SolutionDataPoints.Length;
             foreach (SolutionDataPoint sdp in SolutionDataPoints)
             { 
-                sdp.CalculateEnergyTransfer(globalAverage);
+                sdp.CalculateEnergyTransfer(SolutionEnergy);
                 if (CurrentHeatLevel > 0 && sdp.ShouldBeHeated(heatXMin, heatXMax))
                 {
                     sdp.ReceiveEnergy(heatEnergy);
@@ -159,6 +216,14 @@ namespace KazatanGames.Game
             {
                 sdp.ApplyEnergyTransfer();
             }
+        }
+
+        protected void CheckForCrack()
+        {
+            GameOverFrozen = SolutionEnergy < Config.minSolutionEnergy;
+            GameOverCombust = SolutionEnergy > Config.maxSolutionEnergy;
+
+            GlassCracked = GameOverFrozen || GameOverCombust;
         }
     }
 }

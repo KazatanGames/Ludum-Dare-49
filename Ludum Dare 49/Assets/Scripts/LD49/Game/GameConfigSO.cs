@@ -37,6 +37,13 @@ namespace KazatanGames.Game
 
         public float reactionDistance = 10f;
 
+        public float minSolutionEnergy = -10f;
+        public float maxSolutionEnergy = 110f;
+        public float hotSolutionEnergyWarn = 85f;
+        public float coldSolutionEnergyWarn = 0f;
+
+        public float crackSlowDownTime = 2f;
+
         [Range(1, 240)]
         public int solutionEnergyTicksPerSecond = 1;
 
@@ -53,5 +60,7 @@ namespace KazatanGames.Game
         };
 
         public List<ReactionStruct> reactions;
+
+        public List<TargetStruct> targets;
     }
 }

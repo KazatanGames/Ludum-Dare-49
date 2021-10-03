@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using KazatanGames.Framework;
-using TMPro;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -14,24 +13,9 @@ namespace KazatanGames.Game
         [SerializeField]
         protected Transform moleculeContainer;
         [SerializeField]
-        protected RectTransform reactionsUIContainer;
-        [SerializeField]
-        protected Sprite plusSprite;
-        [SerializeField]
-        protected Sprite equalsSprite;
-        [SerializeField]
-        protected KnownReactionRow knownReactionRowPrefab;
-        [SerializeField]
-        protected TextMeshProUGUI heatLevelText;
-        [SerializeField]
         protected ParticleSystem heatParticleSystem;
         [SerializeField]
         protected GameObject reactionParticlePrefab;
-
-        [SerializeField]
-        protected MoleculeTypeSO moleculesToAddY;
-        [SerializeField]
-        protected MoleculeTypeSO moleculesToAddR;
 
         [SerializeField]
         protected GameConfigSO gameConfig;
@@ -53,6 +37,8 @@ namespace KazatanGames.Game
         {
             moleculeGameObjects = new Dictionary<MoleculeData, GameObject>();
 
+            ResetVis();
+
             gradientLUT = new Color[256];
             for (int i = 0; i < 256; i++)
             {
@@ -66,13 +52,12 @@ namespace KazatanGames.Game
 
         protected void Update()
         {
+            if (GameModel.Current.ResetInvalidated) ResetVis();
+            
             GameModel.Current.Update(Time.deltaTime);
             DrawMolecules();
             DrawFlame();
             DrawReactions();
-            if (GameModel.Current.KnownReactionsInvalidated) DrawKnownReactions();
-
-            heatLevelText.SetText($"Heat: {GameModel.Current.CurrentHeatLevel}");
         }
 
         protected void DrawMolecules()
@@ -99,7 +84,7 @@ namespace KazatanGames.Game
                 {
                     mGO = moleculeGameObjects[md];
                 }
-                mGO.transform.localPosition = md.position;
+                mGO.transform.localPosition = new Vector3(md.position.x, md.position.y, md.z);
                 mGO.transform.localRotation = Quaternion.AngleAxis(md.angle, Vector3.forward);
             }
         }
@@ -128,46 +113,15 @@ namespace KazatanGames.Game
             GameModel.Current.ReactionLocations.Clear();
         }
 
-        protected void DrawKnownReactions()
+        protected void ResetVis()
         {
-            GameModel.Current.KnownReactionsInvalidated = false;
-            foreach (RectTransform child in reactionsUIContainer)
+            foreach (KeyValuePair<MoleculeData, GameObject> mgo in moleculeGameObjects)
             {
-                Destroy(child.gameObject);
+                Destroy(mgo.Value);
             }
-            foreach (ReactionStruct rs in GameModel.Current.KnownReactions)
-            {
-                KnownReactionRow krr = Instantiate(knownReactionRowPrefab, reactionsUIContainer);
-                Sprite[] sprites = new Sprite[rs.results.Length + 4];
+            moleculeGameObjects = new Dictionary<MoleculeData, GameObject>();
 
-                sprites[0] = rs.input1.sprite;
-                sprites[1] = plusSprite;
-                sprites[2] = rs.input2.sprite;
-                sprites[3] = equalsSprite;
-                int i = 0;
-                foreach(MoleculeTypeSO mt in rs.results)
-                {
-                    sprites[4 + i] = mt.sprite;
-                    i++;
-                }
-
-                krr.CreateImages(sprites);
-            }
-        }
-
-        public void ChangeHeat(float value)
-        {
-            GameModel.Current.SetHeatLevel(value);
-        }
-
-        public void AddMoleculesY()
-        {
-            GameModel.Current.AddMolecules(moleculesToAddY, Random.Range(4, 8));
-            GameModel.Current.KnownReactionsInvalidated = true;
-        }
-        public void AddMoleculesR()
-        {
-            GameModel.Current.AddMolecules(moleculesToAddR, Random.Range(4, 8));
+            GameModel.Current.ResetInvalidated = false;
         }
 
 #if UNITY_EDITOR
