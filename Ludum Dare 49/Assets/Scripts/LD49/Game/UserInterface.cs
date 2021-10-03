@@ -32,6 +32,8 @@ namespace KazatanGames.Game
         protected Button addBButton;
         [SerializeField]
         protected Slider heatSlider;
+        [SerializeField]
+        protected TextMeshProUGUI reactionTitleTxt;
 
         [SerializeField]
         protected MoleculeTypeSO moleculesToAddR;
@@ -39,6 +41,9 @@ namespace KazatanGames.Game
         protected MoleculeTypeSO moleculesToAddG;
         [SerializeField]
         protected MoleculeTypeSO moleculesToAddB;
+
+        [SerializeField]
+        protected AudioSource waterAudio;
 
         protected bool uiEnabled = true;
 
@@ -53,21 +58,27 @@ namespace KazatanGames.Game
         {
             if (GameModel.Current.GlassCracked) return;
 
-            GameModel.Current.AddMolecules(moleculesToAddR, Random.Range(4, 8));
+            GameModel.Current.AddMolecules(moleculesToAddR, 2);
+
+            waterAudio.Play();
         }
 
         public void AddMoleculesG()
         {
             if (GameModel.Current.GlassCracked) return;
 
-            GameModel.Current.AddMolecules(moleculesToAddG, Random.Range(4, 8));
+            GameModel.Current.AddMolecules(moleculesToAddG, 2);
+
+            waterAudio.Play();
         }
 
         public void AddMoleculesB()
         {
             if (GameModel.Current.GlassCracked) return;
 
-            GameModel.Current.AddMolecules(moleculesToAddB, Random.Range(4, 8));
+            GameModel.Current.AddMolecules(moleculesToAddB, 2);
+
+            waterAudio.Play();
         }
 
         public void ResetFlask()
@@ -82,7 +93,7 @@ namespace KazatanGames.Game
             foreach(TargetStruct t in GameModel.Current.Config.targets)
             {
                 TargetsRow tr = Instantiate(targetRowPrefab, targetsUIContainer);
-                tr.SetType(t.type);
+                tr.SetTarget(t);
             }
         }
 
@@ -114,24 +125,18 @@ namespace KazatanGames.Game
             {
                 Destroy(child.gameObject);
             }
-            foreach (ReactionStruct rs in GameModel.Current.KnownReactions)
+
+            List<ReactionStruct> sorted = new List<ReactionStruct>(GameModel.Current.Config.reactions);
+            sorted.Sort((r1, r2) => float.Parse(r1.displayEnergy).CompareTo(float.Parse(r2.displayEnergy)));
+
+            foreach (ReactionStruct rs in sorted)
             {
                 KnownReactionRow krr = Instantiate(knownReactionRowPrefab, reactionsUIContainer);
-                Sprite[] sprites = new Sprite[rs.results.Length + 4];
-
-                sprites[0] = rs.input1.sprite;
-                sprites[1] = plusSprite;
-                sprites[2] = rs.input2.sprite;
-                sprites[3] = equalsSprite;
-                int i = 0;
-                foreach (MoleculeTypeSO mt in rs.results)
-                {
-                    sprites[4 + i] = mt.sprite;
-                    i++;
-                }
-
-                krr.CreateImages(sprites);
+                krr.SetData(rs);
+                krr.SetSeen(GameModel.Current.KnownReactions.Contains(rs));
             }
+
+            reactionTitleTxt.text = $"Reactions (Seen {GameModel.Current.KnownReactions.Count}/{GameModel.Current.Config.reactions.Count})";
         }
     }
 }

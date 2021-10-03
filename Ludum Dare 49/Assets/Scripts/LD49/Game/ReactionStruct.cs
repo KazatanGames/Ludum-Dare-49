@@ -19,5 +19,6 @@ namespace KazatanGames.Game
         public float energyCreated;
         public float exothermicInstability;
         public float endothermicInstability;
+        public string displayEnergy;
     }
 }

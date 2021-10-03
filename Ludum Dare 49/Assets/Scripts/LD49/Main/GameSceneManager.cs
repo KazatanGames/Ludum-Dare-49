@@ -36,8 +36,6 @@ namespace KazatanGames.Game
         protected AudioSource iceAudio;
         [SerializeField]
         protected AudioSource hotReactAudio;
-        [SerializeField]
-        protected AudioSource coldReactAudio;
 
         [SerializeField]
         protected GameConfigSO gameConfig;

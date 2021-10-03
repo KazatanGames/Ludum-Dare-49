@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: CyanCircle
   m_EditorClassIdentifier: 
   title: Green Circle
-  moleculePrefab: {fileID: 2844902137024251639, guid: ba1247a98bac44c4b83bc3538666cab5,
+  moleculePrefab: {fileID: 2844902137024251639, guid: 90a16ff56913855409cdd15f2e7d5041,
     type: 3}
-  sprite: {fileID: 21300000, guid: d88b89cd3cf13c944bee1e9845980bc6, type: 3}
+  sprite: {fileID: 21300000, guid: 4a9223bdfb3c3f04dbb1072745a047a2, type: 3}
   energiseWobbleMulti: 0.75
   energeticSpeedMulti: 1
-  energiseEnergyMin: 16.75
-  energyAcclimatisationSpeed: 4
+  energiseEnergyMin: 0
+  energyAcclimatisationSpeed: 10

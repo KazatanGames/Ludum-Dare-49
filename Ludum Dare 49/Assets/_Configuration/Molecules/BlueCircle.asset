@@ -19,4 +19,4 @@ MonoBehaviour:
   energiseWobbleMulti: 0.05
   energeticSpeedMulti: 0.15
   energiseEnergyMin: -20
-  energyAcclimatisationSpeed: 8
+  energyAcclimatisationSpeed: 20

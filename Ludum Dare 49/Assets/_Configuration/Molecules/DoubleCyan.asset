@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c3e4494c126c93c44bb4b8f9cebaa3e2, type: 3}
-  m_Name: DoubleYellowCircle
+  m_Name: DoubleCyan
   m_EditorClassIdentifier: 
   title: Double Yellow Circle
-  moleculePrefab: {fileID: 2844902137024251639, guid: 6288e084327971442986c24281b1e058,
+  moleculePrefab: {fileID: 2844902137024251639, guid: dd881fd1524fd584da380e7453141c1c,
     type: 3}
-  sprite: {fileID: 21300000, guid: 0b29b962ea0f33e4894cd6dc2530c97d, type: 3}
+  sprite: {fileID: 21300000, guid: 4cd9e51f69eaae947b40eefd19f80441, type: 3}
   energiseWobbleMulti: 0.75
   energeticSpeedMulti: 1
   energiseEnergyMin: 16.75

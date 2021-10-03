@@ -18,5 +18,5 @@ MonoBehaviour:
   sprite: {fileID: 21300000, guid: 9e72629c961cf4e4986f012bc361b1f6, type: 3}
   energiseWobbleMulti: 0.75
   energeticSpeedMulti: 1
-  energiseEnergyMin: 16.75
+  energiseEnergyMin: 12
   energyAcclimatisationSpeed: 4

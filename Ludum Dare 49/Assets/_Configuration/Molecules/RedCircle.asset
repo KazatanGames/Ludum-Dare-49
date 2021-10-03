@@ -16,7 +16,7 @@ MonoBehaviour:
   moleculePrefab: {fileID: 2844902137024251639, guid: af8eb5b28c2c2c04baf88634546fae2e,
     type: 3}
   sprite: {fileID: 21300000, guid: 7310162231fda8c40bb5bb34bfc1ede2, type: 3}
-  energiseWobbleMulti: 0.75
+  energiseWobbleMulti: 1.5
   energeticSpeedMulti: 1.25
   energiseEnergyMin: 16.75
-  energyAcclimatisationSpeed: 4
+  energyAcclimatisationSpeed: 15

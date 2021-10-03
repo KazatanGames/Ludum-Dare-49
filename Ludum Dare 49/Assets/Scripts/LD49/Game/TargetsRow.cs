@@ -16,6 +16,8 @@ namespace KazatanGames.Game
         protected Image img;
         [SerializeField]
         protected TextMeshProUGUI txt;
+        [SerializeField]
+        protected TextMeshProUGUI ptsTxt;
 
         protected MoleculeTypeSO type;
 
@@ -25,9 +27,10 @@ namespace KazatanGames.Game
             txt.text = GameModel.Current.GetCreatedCount(type).ToString("F0");
         }
 
-        public void SetType(MoleculeTypeSO type)
+        public void SetTarget(TargetStruct ts)
         {
-            this.type = type;
+            type = ts.type;
+            ptsTxt.text = $"{ts.points.ToString("F0")} x";
             img.sprite = type.sprite;
         }
     }

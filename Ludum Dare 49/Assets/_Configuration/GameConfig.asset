@@ -38,52 +38,116 @@ MonoBehaviour:
   burnerFlickerDistance: 0.25
   solutionEnergyTicksPerSecond: 30
   minHeat:
-    addEnergy: 2
-    width: 1
+    addEnergy: 10
+    width: 3
   maxHeat:
-    addEnergy: 15
+    addEnergy: 25
     width: 7
   reactions:
-  - input1: {fileID: 11400000, guid: 01d77d2cf5fb534408969df1ba08e1c5, type: 2}
-    input2: {fileID: 11400000, guid: c5b415c2e5c75f94cb1137ea88134c10, type: 2}
-    minEnergy: 30
-    maxEnergy: 200
-    results:
-    - {fileID: 11400000, guid: d3050dddb2740e84eae239df9b8ea3f3, type: 2}
-    energyCreated: -50
-    exothermicInstability: 0
-    endothermicInstability: 0
-  - input1: {fileID: 11400000, guid: d3050dddb2740e84eae239df9b8ea3f3, type: 2}
-    input2: {fileID: 11400000, guid: d3050dddb2740e84eae239df9b8ea3f3, type: 2}
-    minEnergy: 60
-    maxEnergy: 200
-    results:
-    - {fileID: 11400000, guid: e0c48830eff45594182e0a7fb314e6a0, type: 2}
-    energyCreated: 2000
-    exothermicInstability: 1
-    endothermicInstability: 0
-  - input1: {fileID: 11400000, guid: e0c48830eff45594182e0a7fb314e6a0, type: 2}
-    input2: {fileID: 11400000, guid: 27e0699db4e930f44954b3463d71cd3f, type: 2}
-    minEnergy: -100
-    maxEnergy: 40
-    results:
-    - {fileID: 11400000, guid: d3050dddb2740e84eae239df9b8ea3f3, type: 2}
-    - {fileID: 11400000, guid: d3050dddb2740e84eae239df9b8ea3f3, type: 2}
-    - {fileID: 11400000, guid: 27e0699db4e930f44954b3463d71cd3f, type: 2}
-    energyCreated: -2000
-    exothermicInstability: 0
-    endothermicInstability: 1
   - input1: {fileID: 11400000, guid: 27e0699db4e930f44954b3463d71cd3f, type: 2}
     input2: {fileID: 11400000, guid: 27e0699db4e930f44954b3463d71cd3f, type: 2}
-    minEnergy: -100
+    minEnergy: -10
     maxEnergy: 15
     results:
     - {fileID: 11400000, guid: aa54e4e8a4d034846a9459efbd463262, type: 2}
-    energyCreated: -2000
+    energyCreated: -1000
     exothermicInstability: 0
     endothermicInstability: 1
+    displayEnergy: 10
+  - input1: {fileID: 11400000, guid: 01d77d2cf5fb534408969df1ba08e1c5, type: 2}
+    input2: {fileID: 11400000, guid: c5b415c2e5c75f94cb1137ea88134c10, type: 2}
+    minEnergy: 15
+    maxEnergy: 30
+    results:
+    - {fileID: 11400000, guid: d3050dddb2740e84eae239df9b8ea3f3, type: 2}
+    energyCreated: 250
+    exothermicInstability: 0.025
+    endothermicInstability: 0
+    displayEnergy: 20
+  - input1: {fileID: 11400000, guid: 01d77d2cf5fb534408969df1ba08e1c5, type: 2}
+    input2: {fileID: 11400000, guid: 27e0699db4e930f44954b3463d71cd3f, type: 2}
+    minEnergy: 70
+    maxEnergy: 105
+    results:
+    - {fileID: 11400000, guid: ac4b79f0cfa4b8d4ba88f6b1b6ac5ea7, type: 2}
+    energyCreated: 0
+    exothermicInstability: 0
+    endothermicInstability: 0
+    displayEnergy: 80
+  - input1: {fileID: 11400000, guid: c5b415c2e5c75f94cb1137ea88134c10, type: 2}
+    input2: {fileID: 11400000, guid: 27e0699db4e930f44954b3463d71cd3f, type: 2}
+    minEnergy: 15
+    maxEnergy: 30
+    results:
+    - {fileID: 11400000, guid: e3fbe74d9b3188f4da164599171b40d8, type: 2}
+    energyCreated: -250
+    exothermicInstability: 0
+    endothermicInstability: 0.025
+    displayEnergy: 22
+  - input1: {fileID: 11400000, guid: ac4b79f0cfa4b8d4ba88f6b1b6ac5ea7, type: 2}
+    input2: {fileID: 11400000, guid: d3050dddb2740e84eae239df9b8ea3f3, type: 2}
+    minEnergy: 90
+    maxEnergy: 110
+    results:
+    - {fileID: 11400000, guid: f188eb794316f23439acd8de912163ab, type: 2}
+    - {fileID: 11400000, guid: 01d77d2cf5fb534408969df1ba08e1c5, type: 2}
+    energyCreated: 500
+    exothermicInstability: 1
+    endothermicInstability: 0
+    displayEnergy: 95
+  - input1: {fileID: 11400000, guid: f188eb794316f23439acd8de912163ab, type: 2}
+    input2: {fileID: 11400000, guid: aa54e4e8a4d034846a9459efbd463262, type: 2}
+    minEnergy: 25
+    maxEnergy: 65
+    results:
+    - {fileID: 11400000, guid: 73db08badbfb4194cb91c10117a98b78, type: 2}
+    - {fileID: 11400000, guid: e3fbe74d9b3188f4da164599171b40d8, type: 2}
+    energyCreated: 0
+    exothermicInstability: 0
+    endothermicInstability: 0
+    displayEnergy: 40
+  - input1: {fileID: 11400000, guid: d3050dddb2740e84eae239df9b8ea3f3, type: 2}
+    input2: {fileID: 11400000, guid: e3fbe74d9b3188f4da164599171b40d8, type: 2}
+    minEnergy: 100
+    maxEnergy: 110
+    results:
+    - {fileID: 11400000, guid: 850d16b9ac2eab544be378a1cb57ef68, type: 2}
+    - {fileID: 11400000, guid: 01d77d2cf5fb534408969df1ba08e1c5, type: 2}
+    energyCreated: -2500
+    exothermicInstability: 0
+    endothermicInstability: 2
+    displayEnergy: 100
+  - input1: {fileID: 11400000, guid: 850d16b9ac2eab544be378a1cb57ef68, type: 2}
+    input2: {fileID: 11400000, guid: ac4b79f0cfa4b8d4ba88f6b1b6ac5ea7, type: 2}
+    minEnergy: 25
+    maxEnergy: 40
+    results:
+    - {fileID: 11400000, guid: 1a0a605e9df4b3b45a49a443d26fa9ba, type: 2}
+    - {fileID: 11400000, guid: 27e0699db4e930f44954b3463d71cd3f, type: 2}
+    energyCreated: -1000
+    exothermicInstability: 0
+    endothermicInstability: 1
+    displayEnergy: 32
+  - input1: {fileID: 11400000, guid: 73db08badbfb4194cb91c10117a98b78, type: 2}
+    input2: {fileID: 11400000, guid: 1a0a605e9df4b3b45a49a443d26fa9ba, type: 2}
+    minEnergy: 80
+    maxEnergy: 110
+    results:
+    - {fileID: 11400000, guid: e0c48830eff45594182e0a7fb314e6a0, type: 2}
+    - {fileID: 11400000, guid: 01d77d2cf5fb534408969df1ba08e1c5, type: 2}
+    - {fileID: 11400000, guid: 01d77d2cf5fb534408969df1ba08e1c5, type: 2}
+    energyCreated: 1000
+    exothermicInstability: 1
+    endothermicInstability: 0
+    displayEnergy: 85
   targets:
-  - type: {fileID: 11400000, guid: e0c48830eff45594182e0a7fb314e6a0, type: 2}
-    points: 1
   - type: {fileID: 11400000, guid: aa54e4e8a4d034846a9459efbd463262, type: 2}
+    points: 1
+  - type: {fileID: 11400000, guid: 850d16b9ac2eab544be378a1cb57ef68, type: 2}
     points: 2
+  - type: {fileID: 11400000, guid: 1a0a605e9df4b3b45a49a443d26fa9ba, type: 2}
+    points: 5
+  - type: {fileID: 11400000, guid: 73db08badbfb4194cb91c10117a98b78, type: 2}
+    points: 10
+  - type: {fileID: 11400000, guid: e0c48830eff45594182e0a7fb314e6a0, type: 2}
+    points: 20

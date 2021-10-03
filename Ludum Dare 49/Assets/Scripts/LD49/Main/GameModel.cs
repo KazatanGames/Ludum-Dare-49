@@ -36,6 +36,7 @@ namespace KazatanGames.Game
         public float Endothermics { get; set; } = 0f;
         public float Exothermics { get; set; } = 0f;
 
+
         public Dictionary<MoleculeTypeSO, int> CreatedCounts { get; protected set; }
 
         protected List<MoleculeData> newMolecules;

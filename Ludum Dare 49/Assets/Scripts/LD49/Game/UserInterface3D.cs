@@ -25,16 +25,25 @@ namespace KazatanGames.Game
         protected Color unstableHigh;
 
         protected float unstable = 0;
+        protected float unstableDecaying = 0;
 
         protected void Update()
         {
-            float hotPotEnergy = GameModel.Current.SolutionEnergy + (GameModel.Current.Exothermics * 2.5f);
-            float coldPotEnergy = GameModel.Current.SolutionEnergy - (GameModel.Current.Endothermics * 2.5f);
+            float hotPotEnergy = GameModel.Current.SolutionEnergy + (Mathf.Sqrt(GameModel.Current.Exothermics) * 10f);
+            float coldPotEnergy = GameModel.Current.SolutionEnergy - (Mathf.Sqrt(GameModel.Current.Endothermics) * 10f);
 
             float hotWorry = Mathf.InverseLerp(GameModel.Current.Config.maxSolutionEnergy, GameModel.Current.Config.maxSolutionEnergy + 25f, hotPotEnergy);
             float coldWorry = Mathf.InverseLerp(GameModel.Current.Config.minSolutionEnergy, GameModel.Current.Config.minSolutionEnergy - 25f, coldPotEnergy);
 
             unstable = Mathf.Max(coldWorry, hotWorry);
+
+            if (unstable > unstableDecaying)
+            {
+                unstableDecaying = unstable;
+            } else
+            {
+                unstableDecaying = Mathf.MoveTowards(unstableDecaying, unstable, Time.deltaTime * 0.25f);
+            }
         }
 
         private void LateUpdate()
@@ -103,8 +112,8 @@ namespace KazatanGames.Game
                 }
                 else
                 {
-                    if (unstable <= 0.01f) return "Stable";
-                    if (unstable <= 0.5f) return "Unstable";
+                    if (unstableDecaying <= 0.01f) return "Stable";
+                    if (unstableDecaying <= 0.5f) return "Unstable";
                     return "Highly Unstable";
                 }
             }
@@ -118,12 +127,12 @@ namespace KazatanGames.Game
                 {
                     return Color.red;
                 }
-                else if (unstable <= 0.01f)
+                else if (unstableDecaying <= 0.01f)
                 {
                     return Color.green;
                 } else
                 {
-                    return Color.Lerp(unstableLow, unstableHigh, unstable);
+                    return Color.Lerp(unstableLow, unstableHigh, unstableDecaying);
                 }
             }
         }
