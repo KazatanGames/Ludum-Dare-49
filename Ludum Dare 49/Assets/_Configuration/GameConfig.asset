@@ -32,9 +32,10 @@ MonoBehaviour:
   reactionDistance: 10
   minSolutionEnergy: -10
   maxSolutionEnergy: 110
-  hotSolutionEnergyWarn: 85
+  hotSolutionEnergyWarn: 80
   coldSolutionEnergyWarn: 0
   crackSlowDownTime: 1
+  burnerFlickerDistance: 0.25
   solutionEnergyTicksPerSecond: 30
   minHeat:
     addEnergy: 2

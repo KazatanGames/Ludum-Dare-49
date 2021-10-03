@@ -44,6 +44,8 @@ namespace KazatanGames.Game
 
         public float crackSlowDownTime = 2f;
 
+        public float burnerFlickerDistance = 0.1f;
+
         [Range(1, 240)]
         public int solutionEnergyTicksPerSecond = 1;
 

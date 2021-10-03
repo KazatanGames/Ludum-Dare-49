@@ -16,6 +16,8 @@ namespace KazatanGames.Game
         protected ParticleSystem heatParticleSystem;
         [SerializeField]
         protected GameObject reactionParticlePrefab;
+        [SerializeField]
+        protected Light burnerLight;
 
         [SerializeField]
         protected GameConfigSO gameConfig;
@@ -30,6 +32,11 @@ namespace KazatanGames.Game
         protected Color[] gradientLUT;
         protected float particleTimeRem = 0f;
         protected ParticleSystem.MainModule psMain;
+
+        protected float lightFlickerTime = 0f;
+        protected Vector3 lightFlickerTarget;
+        protected Vector3 lightFlickerOld;
+        protected Vector3 lightFlickerOriginal;
 
         protected Dictionary<MoleculeData, GameObject> moleculeGameObjects;
 
@@ -48,6 +55,8 @@ namespace KazatanGames.Game
             GameModel.Current.Initialise(gameConfig);
 
             psMain = heatParticleSystem.main;
+
+            lightFlickerOriginal = lightFlickerOld = burnerLight.transform.localPosition;
         }
 
         protected void Update()
@@ -102,6 +111,18 @@ namespace KazatanGames.Game
                 heatParticleSystem.Emit(particlesToEmit);
                 particleTimeRem -= timePerEmit * particlesToEmit;
             }
+
+            lightFlickerTime -= Time.deltaTime;
+            if (lightFlickerTime <= 0f)
+            {
+                lightFlickerTime = Random.Range(0.05f, 0.2f);
+                lightFlickerOld = lightFlickerTarget;
+                lightFlickerTarget = lightFlickerOriginal + new Vector3(Random.Range(-gameConfig.burnerFlickerDistance, gameConfig.burnerFlickerDistance), Random.Range(-gameConfig.burnerFlickerDistance, gameConfig.burnerFlickerDistance), Random.Range(-gameConfig.burnerFlickerDistance, gameConfig.burnerFlickerDistance));
+            }
+
+            burnerLight.transform.localPosition = Vector3.Lerp(lightFlickerTarget, lightFlickerOld, Easing.Cubic.InOut(lightFlickerTime / 0.2f));
+
+            burnerLight.intensity = 3f * GameModel.Current.CurrentHeatLevel;
         }
 
         protected void DrawReactions()
