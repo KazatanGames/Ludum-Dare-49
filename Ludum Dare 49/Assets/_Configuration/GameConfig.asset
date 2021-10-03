@@ -51,13 +51,17 @@ MonoBehaviour:
     results:
     - {fileID: 11400000, guid: d3050dddb2740e84eae239df9b8ea3f3, type: 2}
     energyCreated: -50
+    exothermicInstability: 0
+    endothermicInstability: 0
   - input1: {fileID: 11400000, guid: d3050dddb2740e84eae239df9b8ea3f3, type: 2}
     input2: {fileID: 11400000, guid: d3050dddb2740e84eae239df9b8ea3f3, type: 2}
     minEnergy: 60
     maxEnergy: 200
     results:
     - {fileID: 11400000, guid: e0c48830eff45594182e0a7fb314e6a0, type: 2}
-    energyCreated: 1000
+    energyCreated: 2000
+    exothermicInstability: 1
+    endothermicInstability: 0
   - input1: {fileID: 11400000, guid: e0c48830eff45594182e0a7fb314e6a0, type: 2}
     input2: {fileID: 11400000, guid: 27e0699db4e930f44954b3463d71cd3f, type: 2}
     minEnergy: -100
@@ -67,6 +71,8 @@ MonoBehaviour:
     - {fileID: 11400000, guid: d3050dddb2740e84eae239df9b8ea3f3, type: 2}
     - {fileID: 11400000, guid: 27e0699db4e930f44954b3463d71cd3f, type: 2}
     energyCreated: -2000
+    exothermicInstability: 0
+    endothermicInstability: 1
   - input1: {fileID: 11400000, guid: 27e0699db4e930f44954b3463d71cd3f, type: 2}
     input2: {fileID: 11400000, guid: 27e0699db4e930f44954b3463d71cd3f, type: 2}
     minEnergy: -100
@@ -74,6 +80,8 @@ MonoBehaviour:
     results:
     - {fileID: 11400000, guid: aa54e4e8a4d034846a9459efbd463262, type: 2}
     energyCreated: -2000
+    exothermicInstability: 0
+    endothermicInstability: 1
   targets:
   - type: {fileID: 11400000, guid: e0c48830eff45594182e0a7fb314e6a0, type: 2}
     points: 1

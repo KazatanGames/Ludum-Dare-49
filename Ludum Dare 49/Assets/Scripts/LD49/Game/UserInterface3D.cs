@@ -17,6 +17,25 @@ namespace KazatanGames.Game
         protected TextMeshPro stabilityText;
         [SerializeField]
         protected TextMeshPro pointsText;
+        [SerializeField]
+        [ColorUsage(true, true)]
+        protected Color unstableLow;
+        [SerializeField]
+        [ColorUsage(true, true)]
+        protected Color unstableHigh;
+
+        protected float unstable = 0;
+
+        protected void Update()
+        {
+            float hotPotEnergy = GameModel.Current.SolutionEnergy + (GameModel.Current.Exothermics * 2.5f);
+            float coldPotEnergy = GameModel.Current.SolutionEnergy - (GameModel.Current.Endothermics * 2.5f);
+
+            float hotWorry = Mathf.InverseLerp(GameModel.Current.Config.maxSolutionEnergy, GameModel.Current.Config.maxSolutionEnergy + 25f, hotPotEnergy);
+            float coldWorry = Mathf.InverseLerp(GameModel.Current.Config.minSolutionEnergy, GameModel.Current.Config.minSolutionEnergy - 25f, coldPotEnergy);
+
+            unstable = Mathf.Max(coldWorry, hotWorry);
+        }
 
         private void LateUpdate()
         {
@@ -36,18 +55,18 @@ namespace KazatanGames.Game
             {
                 if (GameModel.Current.SolutionEnergy > GameModel.Current.Config.maxSolutionEnergy)
                 {
-                    return "CRITICAL HOT";
+                    return "HOT";
                 } else if (GameModel.Current.SolutionEnergy < GameModel.Current.Config.minSolutionEnergy)
                 {
-                    return "CRITICAL COLD";
+                    return "COLD";
                 }
                 else if (GameModel.Current.SolutionEnergy >= GameModel.Current.Config.hotSolutionEnergyWarn)
                 {
-                    return "WARNING HOT";
+                    return "HOT";
                 }
                 else if (GameModel.Current.SolutionEnergy <= GameModel.Current.Config.coldSolutionEnergyWarn)
                 {
-                    return "WARNING COLD";
+                    return "COLD";
                 } else
                 {
                     return "OK";
@@ -84,7 +103,9 @@ namespace KazatanGames.Game
                 }
                 else
                 {
-                    return "Stable";
+                    if (unstable <= 0.01f) return "Stable";
+                    if (unstable <= 0.5f) return "Unstable";
+                    return "Highly Unstable";
                 }
             }
         }
@@ -97,9 +118,12 @@ namespace KazatanGames.Game
                 {
                     return Color.red;
                 }
-                else
+                else if (unstable <= 0.01f)
                 {
                     return Color.green;
+                } else
+                {
+                    return Color.Lerp(unstableLow, unstableHigh, unstable);
                 }
             }
         }

@@ -49,19 +49,22 @@ namespace KazatanGames.Game
             foreach (ReactionStruct reaction in GameModel.Current.Config.reactions)
             {
                 if (reaction.input1 != type && reaction.input2 != type) continue;
-                if (reaction.minEnergy > energy || reaction.maxEnergy < energy) continue;
                 foreach(MoleculeData md in GameModel.Current.Molecules)
                 {
                     if (md == this) continue;
                     if (GameModel.Current.DeadMolecules.Contains(md)) continue;
-                    if (reaction.minEnergy > md.energy || reaction.maxEnergy < md.energy) continue;
                     if (reaction.input1 == type && reaction.input2 != md.type) continue;
                     if (reaction.input2 == type && reaction.input1 != md.type) continue;
 
-                    // the reaction could happen
-                    if (reaction.bigEndothermic) GameModel.Current.Endothermics++;
-                    if (reaction.bigExothermic) GameModel.Current.Exothermics++;
+                    if (GameModel.Current.SolutionEnergy > reaction.minEnergy && GameModel.Current.SolutionEnergy < reaction.maxEnergy)
+                    {
+                        // the reaction could happen
+                        GameModel.Current.Endothermics += reaction.endothermicInstability;
+                        GameModel.Current.Exothermics += reaction.exothermicInstability;
+                    }
 
+                    if (reaction.minEnergy > energy || reaction.maxEnergy < energy) continue; // this check bodged to here to allow the instability calc above
+                    if (reaction.minEnergy > md.energy || reaction.maxEnergy < md.energy) continue;
                     if (Vector2.Distance(position, md.position) > GameModel.Current.Config.reactionDistance) continue;
 
                     reactedReaction = reaction;

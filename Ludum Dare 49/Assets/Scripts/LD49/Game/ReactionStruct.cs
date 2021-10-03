@@ -17,7 +17,7 @@ namespace KazatanGames.Game
         public float maxEnergy;
         public MoleculeTypeSO[] results;
         public float energyCreated;
-        public bool bigExothermic;
-        public bool bigEndothermic;
+        public float exothermicInstability;
+        public float endothermicInstability;
     }
 }

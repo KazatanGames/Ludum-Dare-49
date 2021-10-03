@@ -33,8 +33,8 @@ namespace KazatanGames.Game
 
         public int Score { get; protected set; } = 0;
 
-        public int Endothermics { get; set; } = 0;
-        public int Exothermics { get; set; } = 0;
+        public float Endothermics { get; set; } = 0f;
+        public float Exothermics { get; set; } = 0f;
 
         public Dictionary<MoleculeTypeSO, int> CreatedCounts { get; protected set; }
 
@@ -51,8 +51,8 @@ namespace KazatanGames.Game
 
         public void Update(float time)
         {
-            Endothermics = 0;
-            Exothermics = 0;
+            Endothermics = 0f;
+            Exothermics = 0f;
 
             if (GlassCracked && timeSlowDownTime < Config.crackSlowDownTime)
             {

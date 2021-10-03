@@ -28,6 +28,16 @@ namespace KazatanGames.Game
         protected AudioSource bubblesAudio;
         [SerializeField]
         protected AudioSource flameAudio;
+        [SerializeField]
+        protected AudioSource bangAudio;
+        [SerializeField]
+        protected AudioSource glassAudio;
+        [SerializeField]
+        protected AudioSource iceAudio;
+        [SerializeField]
+        protected AudioSource hotReactAudio;
+        [SerializeField]
+        protected AudioSource coldReactAudio;
 
         [SerializeField]
         protected GameConfigSO gameConfig;
@@ -85,14 +95,19 @@ namespace KazatanGames.Game
             if (gameOver != GameModel.Current.GlassCracked)
             {
                 gameOver = GameModel.Current.GlassCracked;
+
                 if (gameOver)
                 {
+                    glassAudio.Play();
+
                     if (GameModel.Current.GameOverFrozen)
                     {
                         gameOverObject = Instantiate(icePrefab);
+                        iceAudio.Play();
                     } else
                     {
                         gameOverObject = Instantiate(smokePrefab);
+                        bangAudio.Play();
                     }
                 } else
                 {
@@ -151,7 +166,14 @@ namespace KazatanGames.Game
                 heatParticleSystem.Emit(particlesToEmit);
                 particleTimeRemHeat -= timePerEmit * particlesToEmit;
 
-                flameAudio.volume = Mathf.Lerp(0.5f, 1f, GameModel.Current.CurrentHeatLevel);
+                if (gameOver)
+                {
+                    flameAudio.volume = GameModel.Current.CurrentHeatLevel;
+                }
+                else
+                {
+                    flameAudio.volume = Mathf.Lerp(0.5f, 1f, GameModel.Current.CurrentHeatLevel);
+                }
             } else
             {
                 flameAudio.volume = 0f;
@@ -163,7 +185,13 @@ namespace KazatanGames.Game
 
                 float bubbleRatio = Mathf.Clamp(Mathf.InverseLerp(bubbleStartEnergy, gameConfig.maxSolutionEnergy, GameModel.Current.SolutionEnergy), 0f, 1f);
 
-                bubblesAudio.volume = bubbleRatio;
+                if (gameOver)
+                {
+                    bubblesAudio.volume = Mathf.Min(bubbleRatio, GameModel.Current.CurrentHeatLevel);
+                } else
+                {
+                    bubblesAudio.volume = bubbleRatio;
+                }
                 if (bubbleRatio > 0)
                 {
                     float bubblesDesired = bubblesPerSecondMax * bubbleRatio;
@@ -198,6 +226,8 @@ namespace KazatanGames.Game
             foreach(Vector3 position in GameModel.Current.ReactionLocations)
             {
                 Instantiate(reactionParticlePrefab, position, Quaternion.identity, moleculeContainer).transform.localPosition = position;
+                hotReactAudio.transform.localPosition = position;
+                hotReactAudio.Play();
             }
             GameModel.Current.ReactionLocations.Clear();
         }
