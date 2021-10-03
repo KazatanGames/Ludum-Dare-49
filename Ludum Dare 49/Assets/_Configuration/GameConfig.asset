@@ -35,7 +35,7 @@ MonoBehaviour:
   hotSolutionEnergyWarn: 85
   coldSolutionEnergyWarn: 0
   crackSlowDownTime: 1
-  solutionEnergyTicksPerSecond: 240
+  solutionEnergyTicksPerSecond: 30
   minHeat:
     addEnergy: 2
     width: 1
